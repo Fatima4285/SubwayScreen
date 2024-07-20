@@ -10,6 +10,7 @@ package ca.ucalgary.edu.ensf380;
  * @version 1.0
  * @since 2024-07-20
  */
+
 public class TrainInfo {
     private String trainID;
     private double trainLatitude;
@@ -18,11 +19,9 @@ public class TrainInfo {
     private Station currentStation;
     private Station nextStation;
     private Station[] stations;
-    
-    //Constructors
+
     /**
-     * Constructs a TrainInfo object with the specified train ID, latitude,
-     * longitude, line, current station, next station, and an array of stations.
+     * Constructs a TrainInfo object with all possible parameters.
      * 
      * @param trainID the ID of the train
      * @param trainLatitude the latitude of the train
@@ -34,7 +33,6 @@ public class TrainInfo {
      */
     public TrainInfo(String trainID, double trainLatitude, double trainLongitude, String trainLine,
             Station currentStation, Station nextStation, Station[] stations) {
-        super();
         this.trainID = trainID;
         this.trainLatitude = trainLatitude;
         this.trainLongitude = trainLongitude;
@@ -56,12 +54,37 @@ public class TrainInfo {
      */
     public TrainInfo(String trainID, double trainLatitude, double trainLongitude, String trainLine,
             Station currentStation) {
-        super();
-        this.trainID = trainID;
-        this.trainLatitude = trainLatitude;
-        this.trainLongitude = trainLongitude;
-        this.trainLine = trainLine;
-        this.currentStation = currentStation;
+        this(trainID, trainLatitude, trainLongitude, trainLine, currentStation, null, null);
+    }
+
+    /**
+     * Constructs a TrainInfo object with the specified train ID, latitude,
+     * longitude, line, and next station.
+     * 
+     * @param trainID the ID of the train
+     * @param trainLatitude the latitude of the train
+     * @param trainLongitude the longitude of the train
+     * @param trainLine the line the train is on
+     * @param nextStation the next station of the train
+     */
+    public TrainInfo(String trainID, double trainLatitude, double trainLongitude, String trainLine,
+            Station nextStation) {
+        this(trainID, trainLatitude, trainLongitude, trainLine, null, nextStation, null);
+    }
+
+    /**
+     * Constructs a TrainInfo object with the specified train ID, latitude,
+     * longitude, line, and an array of stations.
+     * 
+     * @param trainID the ID of the train
+     * @param trainLatitude the latitude of the train
+     * @param trainLongitude the longitude of the train
+     * @param trainLine the line the train is on
+     * @param stations an array of stations the train stops at
+     */
+    public TrainInfo(String trainID, double trainLatitude, double trainLongitude, String trainLine,
+            Station[] stations) {
+        this(trainID, trainLatitude, trainLongitude, trainLine, null, null, stations);
     }
 
     /**
@@ -77,13 +100,7 @@ public class TrainInfo {
      */
     public TrainInfo(String trainID, double trainLatitude, double trainLongitude, String trainLine,
             Station currentStation, Station[] stations) {
-        super();
-        this.trainID = trainID;
-        this.trainLatitude = trainLatitude;
-        this.trainLongitude = trainLongitude;
-        this.trainLine = trainLine;
-        this.currentStation = currentStation;
-        this.stations = stations;
+        this(trainID, trainLatitude, trainLongitude, trainLine, currentStation, null, stations);
     }
 
     /**
@@ -99,76 +116,9 @@ public class TrainInfo {
      */
     public TrainInfo(String trainID, double trainLatitude, double trainLongitude, String trainLine,
             Station currentStation, Station nextStation) {
-        super();
-        this.trainID = trainID;
-        this.trainLatitude = trainLatitude;
-        this.trainLongitude = trainLongitude;
-        this.trainLine = trainLine;
-        this.currentStation = currentStation;
-        this.nextStation = nextStation;
+        this(trainID, trainLatitude, trainLongitude, trainLine, currentStation, nextStation, null);
     }
 
-    /**
-     * Constructs a TrainInfo object with the specified train ID, latitude,
-     * longitude, line, and next station.
-     * 
-     * @param trainID the ID of the train
-     * @param trainLatitude the latitude of the train
-     * @param trainLongitude the longitude of the train
-     * @param trainLine the line the train is on
-     * @param nextStation the next station of the train
-     */
-    public TrainInfo(String trainID, double trainLatitude, double trainLongitude, String trainLine,
-            Station nextStation) {
-        super();
-        this.trainID = trainID;
-        this.trainLatitude = trainLatitude;
-        this.trainLongitude = trainLongitude;
-        this.trainLine = trainLine;
-        this.nextStation = nextStation;
-    }
-
-    /**
-     * Constructs a TrainInfo object with the specified train ID, latitude,
-     * longitude, line, next station, and an array of stations.
-     * 
-     * @param trainID the ID of the train
-     * @param trainLatitude the latitude of the train
-     * @param trainLongitude the longitude of the train
-     * @param trainLine the line the train is on
-     * @param nextStation the next station of the train
-     * @param stations an array of stations the train stops at
-     */
-    public TrainInfo(String trainID, double trainLatitude, double trainLongitude, String trainLine,
-            Station nextStation, Station[] stations) {
-        super();
-        this.trainID = trainID;
-        this.trainLatitude = trainLatitude;
-        this.trainLongitude = trainLongitude;
-        this.trainLine = trainLine;
-        this.nextStation = nextStation;
-        this.stations = stations;
-    }
-
-    /**
-     * Constructs a TrainInfo object with the specified train ID, latitude,
-     * longitude, line, and an array of stations.
-     * 
-     * @param trainID the ID of the train
-     * @param trainLatitude the latitude of the train
-     * @param trainLongitude the longitude of the train
-     * @param trainLine the line the train is on
-     * @param stations an array of stations the train stops at
-     */
-    public TrainInfo(String trainID, double trainLatitude, double trainLongitude, String trainLine,
-            Station[] stations) {
-        super();
-        this.trainID = trainID;
-        this.trainLatitude = trainLatitude;
-        this.trainLongitude = trainLongitude;
-        this.trainLine = trainLine;
-        this.stations = stations;
-    }
     
     //Getter and Setters
     /**

@@ -22,7 +22,6 @@ public class Station {
      * @param lATITUDE the latitude of the station
      */
     public Station(String sTATIONNAME, double lONGITUDE, double lATITUDE) {
-        super();
         this.STATIONNAME = sTATIONNAME;
         this.LONGITUDE = lONGITUDE;
         this.LATITUDE = lATITUDE;

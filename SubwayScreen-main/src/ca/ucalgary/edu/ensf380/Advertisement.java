@@ -4,7 +4,7 @@ package ca.ucalgary.edu.ensf380;
  * Advertisement class is responsible for presenting advertisements 
  * (with specific media type, id, and display duration) on the main screen. 
  */
-class Advertisement {
+class Advertisement implements Displayable{
 	private String mediaType;
 	private String adID;
 	private static final int DISPLAYDURATION = 10;

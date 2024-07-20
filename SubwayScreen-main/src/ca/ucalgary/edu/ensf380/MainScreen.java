@@ -76,7 +76,7 @@ class MainScreen {
      *
      * @param news the new news provider
      */
-	public void setNews(NewsProviders news) {
+	public void setNews(NewsProvider news) {
 		this.news = news;
 	}
 	

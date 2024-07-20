@@ -105,9 +105,9 @@ class Map implements Displayable{
 	//Other methods
 	
 	/**
-	 * Displays the map.
+	 * Displays the map. Inherited from displayable
 	 */
-	public void displayMap() {
+	public void display() {
 		//Still need to add functionality
 	}
 

@@ -107,7 +107,7 @@ class Map implements Displayable{
 	/**
 	 * Displays the map.
 	 */
-	public void displayMap() {
+	public void display() {
 		//Still need to add functionality
 	}
 

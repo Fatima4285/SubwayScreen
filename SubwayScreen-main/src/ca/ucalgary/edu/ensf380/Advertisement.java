@@ -68,7 +68,7 @@ class Advertisement implements Displayable{
 	}
 	
 	
-	public void displayAd() {
+	public void display() {
 		//body still needs to be made for this method
 	}
 }

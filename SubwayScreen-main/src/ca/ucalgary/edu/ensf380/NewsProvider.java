@@ -65,7 +65,9 @@ class NewsProvider implements Displayable{
      * 
      * @param newsApi the NewsAPI used to fetch or display news
      */
-	public void displayNews(NewsAPI newsApi) {
+	public void display() {
 		//IMPLEMENT SOMETHING
+		//implements from Displayable
 	}
+	
 }

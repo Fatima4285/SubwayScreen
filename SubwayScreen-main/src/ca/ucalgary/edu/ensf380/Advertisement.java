@@ -67,7 +67,10 @@ class Advertisement implements Displayable{
 		return DISPLAYDURATION;
 	}
 	
-	
+	/**
+     * Inherited method from displayable to display add.
+     *
+     */
 	public void display() {
 		//body still needs to be made for this method
 	}

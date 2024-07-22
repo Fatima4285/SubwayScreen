@@ -1,5 +1,8 @@
 package ca.ucalgary.edu.ensf380;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * The NewsAPI class extends DataRetriever and is responsible for
  * interacting with news data APIs. This class is designed to retrieve news data

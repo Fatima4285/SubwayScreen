@@ -17,6 +17,7 @@ public class DataRetriever {
     private double longitude;
     private double latitude;
     private Date date;
+    private final OkHttpClient httpClient;
     
     //Constructor
     /**

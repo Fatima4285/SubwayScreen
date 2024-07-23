@@ -17,10 +17,6 @@ public class AdvertisementDatabase {
     
     /**
      * Constructs an AdvertisementDatabase object with the specified database URL, username, and password.
-     * 
-     * @param url the database URL
-     * @param username the database username
-     * @param password the database password
      */
     public AdvertisementDatabase() {
 

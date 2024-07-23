@@ -77,7 +77,7 @@ public class AdvertisementDatabase {
     		results = myStmt.executeQuery("Select path from advertisements"); //from the advertisements table select Path field
     		
     		while(results.next()) {
-    			System.out.println("Print Results: " + results.getString("path"));
+    			System.out.println("Path Results: " + results.getString("path"));
     			
     			adPath.append(results.getString("path")); //for each iteration we append this string to the adPath of type StringBuffer
     			

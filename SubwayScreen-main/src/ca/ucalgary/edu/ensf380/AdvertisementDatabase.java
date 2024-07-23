@@ -51,8 +51,9 @@ public class AdvertisementDatabase {
     		results = myStmt.executeQuery("Select * from advertisements"); //from the advertisements table select all the fields
     		
     		while(results.next()) {
-    			System.out.println("Print Results: " + results.getString("title") + "," + results.getString("description") + "," +
-    		results.getString("path") + "," + results.getString("media_type"));
+    			//UNCOMMENT IF YOU WANNA SEE IN CONSOLE
+    			//System.out.println("Print Results: " + results.getString("title") + "," + results.getString("description") + "," +
+    		//results.getString("path") + "," + results.getString("media_type"));
     			
     			adInfo.append(results.getString("title") + "," + results.getString("description") + "," +
     		results.getString("path") + "," + results.getString("media_type") + "\n"); //for each iteration we append this string to the adInfo of type StringBuffer
@@ -77,7 +78,8 @@ public class AdvertisementDatabase {
     		results = myStmt.executeQuery("Select path from advertisements"); //from the advertisements table select Path field
     		
     		while(results.next()) {
-    			System.out.println("Path Results: " + results.getString("path"));
+    			//UNCOMMENT IF YOU WANNA SEE IN CONSOLE
+    			//System.out.println("Print Results: " + results.getString("path"));
     			
     			adPath.append(results.getString("path")); //for each iteration we append this string to the adPath of type StringBuffer
     			
@@ -102,7 +104,8 @@ public class AdvertisementDatabase {
     		results = myStmt.executeQuery("Select media_type,id from advertisements"); //from the advertisements table select Path field
     		
     		while(results.next()) {
-    			System.out.println("ID and Media type: " + results.getString("id") + ","+ results.getString("media_type"));
+    			//UNCOMMENT IF YOU WANNA SEE IN CONSOLE
+    			//System.out.println("ID and Media type: " + results.getString("id") + ","+ results.getString("media_type"));
     			
     			adMT.append(results.getString("id") + ","+ results.getString("media_type")); //for each iteration we append this string to the adPath of type StringBuffer
     			
@@ -112,6 +115,31 @@ public class AdvertisementDatabase {
     		e.printStackTrace();
     	}
     	return adMT.toString();
+    }
+    
+    /**
+     * selects and returns the title and description of each Ad
+     * 
+     * @throws SQLException if the fields of the database cannot be accessed
+     */
+    public String selectTitleAndDesc() throws SQLException{
+    	StringBuffer adTitleDesc = new StringBuffer(); //THis is a class that just allows us to modify strings
+    	try {
+    		Statement myStmt = dbConnect.createStatement(); //create a statement
+    		results = myStmt.executeQuery("Select title,description from advertisements"); //from the advertisements table select all the fields
+    		
+    		while(results.next()) {
+    			//UNCOMMENT IF YOU WANNA SEE IN CONSOLE
+    			//System.out.println("Titles: " + results.getString("title") + "," + results.getString("description")); //might want to take this out so it doesnt print randomly
+    			
+    			adTitleDesc.append(results.getString("title") + "," + results.getString("description")); //for each iteration we append this string to the adtitle of type StringBuffer
+    			
+    		}
+    		myStmt.close();
+    	}catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return adTitleDesc.toString();
     }
     
     /**

@@ -11,6 +11,11 @@ class Announcement {
 	private TrainInfo trainInfo;
 	private String audioFile;
 	
+	
+	public Announcement() {
+        // Initialization if needed
+    }
+	
 	//constructor
 	/**
 	 * Constructs a new Announcement object with the specified details.

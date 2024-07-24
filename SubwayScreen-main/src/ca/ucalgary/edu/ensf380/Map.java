@@ -19,6 +19,8 @@ class Map implements Displayable{
 	 * @param latitude the latitude coordinate of the train on the map
 	 * @param mapImg the associated map Image
 	 */
+	
+
 	public Map(String mapID, double longitude, double latitude, String mapImg) {
 		this.mapID = mapID;
 		this.longitude = longitude;
@@ -107,8 +109,11 @@ class Map implements Displayable{
 	/**
 	 * Displays the map. Inherited from displayable
 	 */
+	@Override
 	public void display() {
-		//Still need to add functionality
+	    System.out.println("Map ID: " + mapID);
+	    System.out.println("Longitude: " + longitude);
+	    System.out.println("Latitude: " + latitude);
+	    System.out.println("Map Image URL: " + mapImg);
 	}
-
 }

@@ -2,7 +2,14 @@ package ca.ucalgary.edu.ensf380;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The NewsAPI class extends DataRetriever and is responsible for
@@ -13,15 +20,18 @@ import java.io.IOException;
 public class NewsAPI extends DataRetriever { 
 
     private final ObjectMapper objectMapper;
+    private final String keyword;
 
     /**
      * Constructs a NewsAPI instance with the specified endpoint.
      *
      * @param ENDPOINT The endpoint URL for the news data API.
+     * @param keyword The keyword to filter news articles.
      */
-    public NewsAPI(String ENDPOINT) {
+    public NewsAPI(String ENDPOINT, String keyword) {
         super(ENDPOINT);
         this.objectMapper = new ObjectMapper(); // Instantiate ObjectMapper
+        this.keyword = keyword;
     }
 
     /**
@@ -30,10 +40,27 @@ public class NewsAPI extends DataRetriever {
      * @return JsonNode containing the news data
      * @throws IOException if there is an issue with data retrieval or parsing
      */
-    public JsonNode getNewsData() throws IOException {
-        // Example of fetching data - replace with actual implementation
-        String jsonResponse = fetchDataFromAPI(); // Replace with actual method to get the data
+    public JsonNode getNewsData() throws IOException, InterruptedException {
+        String jsonResponse = fetchDataFromAPI();
         return objectMapper.readTree(jsonResponse);
+    }
+
+    /**
+     * Filters news articles based on the keyword.
+     * 
+     * @param articles JsonNode containing the articles to be filtered
+     * @return List<JsonNode> of filtered articles
+     */
+    private List<JsonNode> filterArticles(JsonNode articles) {
+        List<JsonNode> filteredArticles = new ArrayList<>();
+        for (JsonNode article : articles) {
+            String title = article.get("title").asText().toLowerCase();
+            String description = article.get("description").asText().toLowerCase();
+            if (title.contains(keyword.toLowerCase()) || description.contains(keyword.toLowerCase())) {
+                filteredArticles.add(article);
+            }
+        }
+        return filteredArticles;
     }
 
     /**
@@ -44,7 +71,9 @@ public class NewsAPI extends DataRetriever {
             JsonNode response = getNewsData();
             JsonNode articles = response.get("articles");
 
-            for (JsonNode article : articles) {
+            List<JsonNode> filteredArticles = filterArticles(articles);
+
+            for (JsonNode article : filteredArticles) {
                 String title = article.get("title").asText();
                 String description = article.get("description").asText();
                 String url = article.get("url").asText();
@@ -53,20 +82,26 @@ public class NewsAPI extends DataRetriever {
                 System.out.println("URL: " + url);
                 System.out.println();
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    // Method to simulate fetching data from API
-    private String fetchDataFromAPI() {
-        // Replace with actual API call logic
-        return "{ \"articles\": [{ \"title\": \"Sample Title\", \"description\": \"Sample Description\", \"url\": \"http://example.com\" }] }";
+    /**
+     * Fetches data from the API.
+     * 
+     * @return The JSON response from the API as a String.
+     * @throws IOException, InterruptedException if there is an issue with data retrieval.
+     */
+    private String fetchDataFromAPI() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(getENDPOINT()))
+            .header("Accept", "application/json")
+            .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
     }
 
-    public static void main(String[] args) {
-        String endpoint = "https://newsapi.org/v2/top-headlines?country=us&apiKey=YOUR_NEWSAPI_KEY";
-        NewsAPI newsAPI = new NewsAPI(endpoint);
-        newsAPI.printNewsHeadlines();
-    }
 }

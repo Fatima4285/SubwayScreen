@@ -1,155 +1,90 @@
 package ca.ucalgary.edu.ensf380;
 
-/**
- * The MainScreen class represents a screen that displays various types of information 
- * such as a map, advertisement, weather, news, announcements, and train information.
- */
+public class MainScreen {
+    private Map map;
+    private Advertisement advertisement;
+    private WeatherService weather;
+    private NewsProvider news;
+    private Announcement announcement;
+    private TrainInfo trainInfo;
 
-class MainScreen {
-	
-	private Map map;
-	private Advertisement advertisement;
-	private WeatherService weather;
-	private NewsProvider news;
-	private Announcement announcement;
-	private TrainInfo trainInfo;
-	
-	/**
-     * Constructs a MainScreen with the specified map, advertisement, weather service, news provider,
-     * announcement, and train information.
-     *
-     * @param map the map to be displayed
-     * @param advertisement the advertisement to be displayed
-     * @param weather the weather service providing weather information
-     * @param news the news provider
-     * @param announcement the announcement to be displayed
-     * @param trainInfo the train information to be displayed
-     */
-	
-	MainScreen(Map map, Advertisement advertisement, WeatherService weather, NewsProvider news, Announcement announcement, TrainInfo trainInfo) {
-		this.map = map;
-		this.advertisement = advertisement;
-		this.weather = weather;
-		this.news = news;
-		this.announcement = announcement;
-		this.trainInfo = trainInfo;
-	}
-	
-	/**
-     * Sets the map to be displayed on the main screen.
-     *
-     * @param map the new map
-     */
-	public void setMap(Map map) {
-		this.map = map;
-	}
-	
-	/**
-     * Sets the announcement to be displayed on the main screen.
-     *
-     * @param announcement the new announcement
-     */
-	public void setAnnouncement(Announcement announcement) {
-		this.announcement = announcement;
-	}
-	
-	/**
-     * Sets the advertisement to be displayed on the main screen.
-     *
-     * @param advertisement the new advertisement
-     */
-	public void setAdvertisement(Advertisement advertisement) {
-		this.advertisement = advertisement;
-	}
+    public MainScreen(Map map, Advertisement advertisement, WeatherService weather, NewsProvider news, Announcement announcement, TrainInfo trainInfo) {
+        this.map = map;
+        this.advertisement = advertisement;
+        this.weather = weather;
+        this.news = news;
+        this.announcement = announcement;
+        this.trainInfo = trainInfo;
+    }
 
-    /**
-     * Sets the weather service providing weather information on the main screen.
-     *
-     * @param weather the new weather service
-     */
-	public void setWeather(WeatherService weather) {
-		this.weather = weather;
-	}
-	
-	/**
-     * Sets the news provider to be displayed on the main screen.
-     *
-     * @param news the new news provider
-     */
-	public void setNews(NewsProvider news) {
-		this.news = news;
-	}
-	
-	 /**
-     * Sets the train information to be displayed on the main screen.
-     *
-     * @param trainInfo the new train information
-     */
-	
-	public void setTrainInfo(TrainInfo trainInfo) {
-		this.trainInfo = trainInfo;
-	}
-	
-	/**
-     * Returns the train information displayed on the main screen.
-     *
-     * @return the train information
-     */
-	public TrainInfo getTrainInfo() {
-		return trainInfo;
-	}
-	
+    public void setMap(Map map) {
+        this.map = map;
+    }
 
-    /**
-     * Returns the map displayed on the main screen.
-     *
-     * @return the map
-     */
-	public Map getMap() {
-		return map;
-	}
-	
-	/**
-     * Returns the announcement displayed on the main screen.
-     *
-     * @return the announcement
-     */
-	public Announcement getAnnouncement() {
-		return announcement;
-	}
-	
-	 /**
-     * Returns the advertisement displayed on the main screen.
-     *
-     * @return the advertisement
-     */
-	public Advertisement getAdvertisement() {
-		return advertisement;
-	}
-	
-	/**
-     * Returns the weather service providing weather information on the main screen.
-     *
-     * @return the weather service
-     */
-	public WeatherService getWeather() {
-		return weather;
-	}
-	
+    public void setAnnouncement(Announcement announcement) {
+        this.announcement = announcement;
+    }
 
-    /**
-     * Returns the news provider displayed on the main screen.
-     *
-     * @return the news provider
-     */
-	public NewsProvider getNews() {
-		return news;
-	}
-	
-	public static void main(String[] args) { 
-		System.out.println("Hello world!");
+    public void setAdvertisement(Advertisement advertisement) {
+        this.advertisement = advertisement;
+    }
 
-	}
+    public void setWeather(WeatherService weather) {
+        this.weather = weather;
+    }
+
+    public void setNews(NewsProvider news) {
+        this.news = news;
+    }
+
+    public void setTrainInfo(TrainInfo trainInfo) {
+        this.trainInfo = trainInfo;
+    }
+
+    public TrainInfo getTrainInfo() {
+        return trainInfo;
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public Announcement getAnnouncement() {
+        return announcement;
+    }
+
+    public Advertisement getAdvertisement() {
+        return advertisement;
+    }
+
+    public WeatherService getWeather() {
+        return weather;
+    }
+
+    public NewsProvider getNews() {
+        return news;
+    }
+
+    public static void main(String[] args) {
+        // Create instances of other classes using the provided constructors
+        Map map = new Map("map001", 114.0719, 51.0447, "http://example.com/map.png");
+        Advertisement advertisement = new Advertisement("Digital", "ad123");
+        WeatherService weather = new WeatherService("MST", 23.5, 21.0, "Sunny", 15.0);
+        Announcement announcement = new Announcement(); // Ensure this has a default constructor
+        TrainInfo trainInfo = new TrainInfo(); // Ensure this has a default constructor
+        
+        // Create an instance of NewsProvider (assuming this class requires a URL endpoint)
+        String endpoint = "https://newsapi.org/v2/top-headlines?country=us&apiKey=2fba803407f040ccb4a075a558ea4a24";
+        NewsProvider newsProvider = new NewsProvider(endpoint);
+        
+        // Instantiate MainScreen with all the objects
+        MainScreen mainScreen = new MainScreen(map, advertisement, weather, newsProvider, announcement, trainInfo);
+        
+        // Test news display
+        System.out.println("Testing news display:");
+        mainScreen.getNews().display();
+    }
+
 
 }
 

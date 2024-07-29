@@ -19,6 +19,10 @@ public class TrainInfo {
     private Station currentStation;
     private Station nextStation;
     private Station[] stations;
+    
+    public TrainInfo() {
+    	
+    }
 
     /**
      * Constructs a TrainInfo object with all possible parameters.

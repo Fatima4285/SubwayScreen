@@ -71,7 +71,11 @@ class Advertisement implements Displayable{
      * Inherited method from displayable to display add.
      *
      */
+	@Override
 	public void display() {
-		//body still needs to be made for this method
+	    System.out.println("Media Type: " + mediaType);
+	    System.out.println("Ad ID: " + adID);
+	    System.out.println("Display Duration: " + DISPLAYDURATION + " seconds");
 	}
+
 }

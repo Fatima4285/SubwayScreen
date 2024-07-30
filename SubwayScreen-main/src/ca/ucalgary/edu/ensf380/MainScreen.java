@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.time.LocalDateTime;
@@ -128,7 +129,7 @@ public class MainScreen extends Thread {
 
     private static void showMapImage() {
         // Load the map image. Update this path as needed.
-        String mapImagePath = "/Users/aroush/ensf380/project/SubwayScreen-main/maps/Trains.png";
+        String mapImagePath = "SubwayScreen-main/maps/Trains.png";
         ImageIcon mapImageIcon = new ImageIcon(mapImagePath);
         Image img = mapImageIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, 500, Image.SCALE_SMOOTH); // Adjust size as needed
         mapLabel.setIcon(new ImageIcon(img));

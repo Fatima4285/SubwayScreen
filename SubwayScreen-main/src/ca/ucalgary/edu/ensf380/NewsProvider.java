@@ -13,6 +13,7 @@ public class NewsProvider extends NewsAPI implements Displayable {
 
     private String headline;
     private String content;
+	private JPanel newsPanel;
 
     /**
      * Constructs a new NewsProvider with the specified endpoint, headline, and content.
@@ -25,6 +26,9 @@ public class NewsProvider extends NewsAPI implements Displayable {
         super(ENDPOINT, "");
         this.headline = headline;
         this.content = content;
+        this.newsPanel = new JPanel();
+        this.newsPanel.setLayout(new BoxLayout(newsPanel, BoxLayout.Y_AXIS));
+        this.newsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
 
     // Overloaded constructor for testing purposes
@@ -32,6 +36,9 @@ public class NewsProvider extends NewsAPI implements Displayable {
         super(ENDPOINT, "");
         this.headline = "Default Headline";
         this.content = "Default Content";
+        this.newsPanel = new JPanel();
+        this.newsPanel.setLayout(new BoxLayout(newsPanel, BoxLayout.Y_AXIS));
+        this.newsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
 
     // Setters
@@ -57,6 +64,8 @@ public class NewsProvider extends NewsAPI implements Displayable {
      */
     @Override
     public void display() {
+        newsPanel.removeAll(); // Clear previous news content
+
         try {
             JsonNode response = getNewsData();
             if (response == null) {
@@ -73,27 +82,9 @@ public class NewsProvider extends NewsAPI implements Displayable {
             // Display only the first article
             JsonNode article = articles.get(0); // Get the first article
 
-            // Debug output
-            System.out.println("Raw Article Data: " + article.toPrettyString());
-
             String title = article.has("title") ? article.get("title").asText() : "No title available";
-            String description = article.has("description") && !article.get("description").isNull() ? 
-                                 article.get("description").asText() : "No description available.";
-            String imageUrl = article.has("urlToImage") && !article.get("urlToImage").isNull() ? 
-                              article.get("urlToImage").asText() : null;
-
-            // Debug output
-            System.out.println("Title: " + title);
-            System.out.println("Description: " + description);
-            System.out.println("Image URL: " + imageUrl);
-
-            JFrame frame = new JFrame("News Display");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setLayout(new BorderLayout());
-
-            JPanel contentPanel = new JPanel();
-            contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-            contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            String description = article.has("description") && !article.get("description").isNull() ? article.get("description").asText() : "";//IF THERE IS NO DESCRIPTION THEN SHOW NOTHING
+            String imageUrl = article.has("urlToImage") && !article.get("urlToImage").isNull() ? article.get("urlToImage").asText() : null;
 
             JLabel titleLabel = new JLabel(title);
             titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
@@ -105,8 +96,8 @@ public class NewsProvider extends NewsAPI implements Displayable {
             descriptionLabel.setHorizontalAlignment(SwingConstants.CENTER);
             descriptionLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-            contentPanel.add(titleLabel);
-            contentPanel.add(descriptionLabel);
+            newsPanel.add(titleLabel);
+            newsPanel.add(descriptionLabel);
 
             if (imageUrl != null && !imageUrl.isEmpty() && (imageUrl.startsWith("http://") || imageUrl.startsWith("https://"))) {
                 try {
@@ -117,22 +108,23 @@ public class NewsProvider extends NewsAPI implements Displayable {
                     ImageIcon scaledIcon = new ImageIcon(scaledImg);
                     JLabel imageLabel = new JLabel(scaledIcon);
                     imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                    contentPanel.add(imageLabel);
+                    newsPanel.add(imageLabel);
                 } catch (IOException e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Failed to load image: " + e.getMessage());
                 }
-            } else {
-                System.out.println("No image URL available.");
             }
 
-            frame.add(contentPanel, BorderLayout.CENTER);
-            frame.setSize(800, 600);
-            frame.setVisible(true);
+            newsPanel.revalidate();
+            newsPanel.repaint();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error fetching news: " + e.getMessage());
         }
+    }
+
+    public JPanel getNewsPanel() {
+        return newsPanel;
     }
 
 

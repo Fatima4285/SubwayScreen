@@ -30,7 +30,7 @@ public class Advertisement {
 	/**
      * Retrieving the file path of an advertisement.
      *
-     * @return the media type
+     * @return the file path
      */
 	public String getFilePath() {
 		return filePath;

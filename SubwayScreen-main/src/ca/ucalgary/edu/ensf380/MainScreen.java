@@ -6,6 +6,12 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.time.LocalDateTime;
@@ -20,7 +26,8 @@ public class MainScreen extends Thread {
     private static JPanel newsPanel;
     private static JLabel mapLabel;
     private static JPanel mapPanel;
-    private static boolean showMap = true;
+    private static List<Advertisement> ads = new ArrayList<>();
+    private static int currentAdIndex = 0;
 
     public MainScreen() {
         start(); // Starts the thread upon class initialization
@@ -94,44 +101,74 @@ public class MainScreen extends Thread {
         mapLabel = new JLabel();
         mapPanel.add(mapLabel);
         frame.add(mapPanel, BorderLayout.CENTER); // Add map panel to center
-
-        // Timer to handle map display
+        
+        // Load Ads
+        loadAdsFromDatabase();
+        
+        // Timer to handle map and advertisement display
         Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        TimerTask adTask = new TimerTask() {
             @Override
             public void run() {
-                if (showMap) {
-                    showMapImage();
+                if (currentAdIndex < ads.size()) {
+                    showAd(ads.get(currentAdIndex));
+                    currentAdIndex++;
                 } else {
-                    // Hide the map and show other content
-                    mapLabel.setIcon(null); // Clear the map image
+                    currentAdIndex = 0;
+                    if (!ads.isEmpty()) {
+                        showAd(ads.get(currentAdIndex));
+                        currentAdIndex++;
+                    }
                 }
-                showMap = !showMap; // Toggle between map and advertisement
-            }
-        }, 0, 10000); // Change every 10 seconds
 
-        // Show the map for 5 seconds
-        Timer displayTimer = new Timer();
-        displayTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (showMap) {
-                    showMapImage();
-                }
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        showMapImage();
+                    }
+                }, 10000); // Delay of 10 seconds
             }
-        }, 0, 15000); // 5 seconds of map and 10 seconds of other content
+        };
+        timer.schedule(adTask, 0, 15000);
 
         frame.setVisible(true);
 
         // Instantiate MainScreen with all the objects
         MainScreen mainScreen = new MainScreen();
     }
+    
+    private static void loadAdsFromDatabase() {
+        try (Connection conn = AdvertisementDatabase.initializeConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM Advertisements")) {
 
+            while (rs.next()) {
+                String filePath = rs.getString("filepath");
+                ads.add(new Advertisement(filePath));
+                }
+            } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     private static void showMapImage() {
         // Load the map image. Update this path as needed.
         String mapImagePath = "SubwayScreen-main/maps/Trains.png";
         ImageIcon mapImageIcon = new ImageIcon(mapImagePath);
         Image img = mapImageIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, 500, Image.SCALE_SMOOTH); // Adjust size as needed
+        mapLabel.setIcon(new ImageIcon(img));
+    }
+    
+    public static void showAd(Advertisement ad) {
+        // Load image
+        File file = new File(ad.getFilePath());
+        if (!file.exists()) {
+            System.err.println("File not found: " + file.getAbsolutePath());
+            return;
+        }
+
+        ImageIcon adImageIcon = new ImageIcon(ad.getFilePath());
+        Image img = adImageIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, 500, Image.SCALE_SMOOTH); // Adjust size as needed
         mapLabel.setIcon(new ImageIcon(img));
     }
 }

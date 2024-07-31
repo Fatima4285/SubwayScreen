@@ -2,8 +2,7 @@
 How To Run Application:
 1. Download the advertisement.sql file provided in the src directory of the application
 2. Make sure MySQL is installed and configured on your laptop
-3. Navigate to the Program Files directory in your laptop's file explorer using command prompt
-4. Navigate into your MySQL server's bin directory
+4. Navigate to your MySQL server's bin directory using command prompt
 5. Run the command "mysql -u root -p" and enter the password you set when configuring MySQL as prompted
 6. Enter the command "CREATE DATABASE advertisement;"
 7. Enter the command "CREATE USER 'Mahdi'@'3306' IDENTIFIED BY 'ensf380';"

@@ -9,5 +9,6 @@ How To Run Application:
 7. Enter the command "CREATE USER 'Mahdi'@'3306' IDENTIFIED BY 'ensf380';"
 8. Enter the command "GRANT ALL PRIVILEGES ON advertisement.* TO 'Mahdi'@'3306';"
 9. Enter the command "EXIT;"
-10. Run the command "mysql -u Mahdi -p advertisement < c:/path/to/advertisement.sql and enter the password 'ensf380' when asked (NOTE: make sure to replace c:/path/to/advertisement.sql with the actual path to the location where you have saved the advertisement.sql file)
+10. Run the command
+    "mysql -u Mahdi -p advertisement < c:/path/to/advertisement.sql" and enter the password 'ensf380' when asked (NOTE: make sure to replace c:/path/to/advertisement.sql with the actual path to the location where you have saved the advertisement.sql file)
 

@@ -1,4 +1,5 @@
 package ca.ucalgary.edu.ensf380;
+
 //main included in this file
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -172,5 +173,3 @@ public class MainScreen extends Thread {
         mapLabel.setIcon(new ImageIcon(img));
     }
 }
-
-

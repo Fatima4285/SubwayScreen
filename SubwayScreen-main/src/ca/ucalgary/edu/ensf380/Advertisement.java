@@ -73,6 +73,10 @@ class Advertisement implements Displayable{
      */
 	@Override
 	public void display() {
+		//initailize a connection w the database
+		AdvertisementDatabase adb = new AdvertisementDatabase();
+		
+		
 	    System.out.println("Media Type: " + mediaType);
 	    System.out.println("Ad ID: " + adID);
 	    System.out.println("Display Duration: " + DISPLAYDURATION + " seconds");

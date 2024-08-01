@@ -75,9 +75,9 @@ public class AdvertisementDatabase {
     		
     		while(results.next()) {
     			//UNCOMMENT IF YOU WANNA SEE IN CONSOLE
-    			//System.out.println("Print Results: " + results.getString("path"));
+    			System.out.println("Print Results: " + results.getString("path"));
     			
-    			adPath.append(results.getString("path")); //for each iteration we append this string to the adPath of type StringBuffer
+    			adPath.append(results.getString("path")+ "\n"); //for each iteration we append this string to the adPath of type StringBuffer
     			
     		}
     		myStmt.close();
@@ -118,17 +118,17 @@ public class AdvertisementDatabase {
      * 
      * @throws SQLException if the fields of the database cannot be accessed
      */
-    public String selectTitleAndDesc() throws SQLException{
+    public String selectDesc() throws SQLException{
     	StringBuffer adTitleDesc = new StringBuffer(); //THis is a class that just allows us to modify strings
     	try {
     		Statement myStmt = dbConnect.createStatement(); //create a statement
-    		results = myStmt.executeQuery("Select title,description from advertisements"); //from the advertisements table select all the fields
+    		results = myStmt.executeQuery("Select description from advertisements"); //from the advertisements table select all the fields
     		
     		while(results.next()) {
     			//UNCOMMENT IF YOU WANNA SEE IN CONSOLE
-    			//System.out.println("Titles: " + results.getString("title") + "," + results.getString("description")); //might want to take this out so it doesnt print randomly
+    			//System.out.println("Desc: " + results.getString("description")); //might want to take this out so it doesnt print randomly
     			
-    			adTitleDesc.append(results.getString("title") + "," + results.getString("description")); //for each iteration we append this string to the adtitle of type StringBuffer
+    			adTitleDesc.append(results.getString("description") + "\n"); //for each iteration we append this string to the adtitle of type StringBuffer
     			
     		}
     		myStmt.close();
@@ -150,5 +150,11 @@ public class AdvertisementDatabase {
     	}catch(SQLException e) {
     		e.printStackTrace();
     	}
+    }
+    
+    public static void main(String[] args) throws SQLException {
+    	AdvertisementDatabase adb = new AdvertisementDatabase();
+		adb.initializeConnection();
+		adb.selectPath();
     }
 }

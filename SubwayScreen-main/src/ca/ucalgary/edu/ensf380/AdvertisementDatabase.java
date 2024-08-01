@@ -2,21 +2,20 @@ package ca.ucalgary.edu.ensf380;
 
 import java.sql.*;
 
-
 /**
  * The AdvertisementDatabase class is responsible for establishing a connection
  * to a database using the provided URL, username, and password.
  * This class is used to interact with the database for advertisement-related operations.
  */
 public class AdvertisementDatabase {
-	private String URL = "jdbc:mysql://localhost:3306/advertisement";
-    private String USERNAME = "Mahdi";
-    private String PASSWORD = "ensf380";
-    private Connection dbConnect;
-    private ResultSet results; //store the results of the query here
+	private static String URL = "jdbc:mysql://localhost:3306/advertisement";
+    private static String USERNAME = "Mahdi";
+    private static String PASSWORD = "ensf380";
+    private static Connection dbConnect;
+    private static ResultSet results; //store the results of the query here
     
     /**
-     * Constructs an AdvertisementDatabase object with the specified database URL, username, and password.
+     * Default constructor
      */
     public AdvertisementDatabase() {
 
@@ -24,15 +23,17 @@ public class AdvertisementDatabase {
 
     /**
      * Initializes and returns a connection to the database.
+     * @return 
      * 
      * @throws SQLException if a database access error occurs or the URL is null
      */
-    public void initializeConnection() throws SQLException {
+    public static Connection initializeConnection() throws SQLException {
         try{
         	dbConnect = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         }catch(SQLException e) {
         	e.printStackTrace();
         }
+        return dbConnect;
     } 
     
     /**
@@ -40,19 +41,18 @@ public class AdvertisementDatabase {
      * 
      * @throws SQLException if the fields of the database cannot be accessed
      */
-    public String selectAD() throws SQLException{
+    public static String selectAd() throws SQLException{
     	StringBuffer adInfo = new StringBuffer(); //THis is a class that just allows us to modify strings
     	try {
     		Statement myStmt = dbConnect.createStatement(); //create a statement
     		results = myStmt.executeQuery("Select * from advertisements"); //from the advertisements table select all the fields
     		
     		while(results.next()) {
-    			//UNCOMMENT IF YOU WANNA SEE IN CONSOLE
-    			//System.out.println("Print Results: " + results.getString("title") + "," + results.getString("description") + "," +
-    		//results.getString("path") + "," + results.getString("media_type"));
+    		System.out.println("SelectAd() print results: " + results.getString("title") + ", " + results.getString("media_type") + ", " +
+    		results.getString("filepath"));
     			
-    			adInfo.append(results.getString("title") + "," + results.getString("description") + "," +
-    		results.getString("path") + "," + results.getString("media_type") + "\n"); //for each iteration we append this string to the adInfo of type StringBuffer
+    			adInfo.append(results.getString("title") + "," +
+    		results.getString("filepath") + "," + results.getString("media_type") + "\n"); //for each iteration we append this string to the adInfo of type StringBuffer
     			
     		}
     		myStmt.close();
@@ -67,17 +67,16 @@ public class AdvertisementDatabase {
      * 
      * @throws SQLException if the fields of the database cannot be accessed
      */
-    public String selectPath() throws SQLException{
+    public static String selectPath() throws SQLException{
     	StringBuffer adPath = new StringBuffer(); //THis is a class that just allows us to modify strings
     	try {
     		Statement myStmt = dbConnect.createStatement(); //create a statement
-    		results = myStmt.executeQuery("Select path from advertisements"); //from the advertisements table select Path field
+    		results = myStmt.executeQuery("Select filepath from advertisements"); //from the advertisements table select Path field
     		
     		while(results.next()) {
-    			//UNCOMMENT IF YOU WANNA SEE IN CONSOLE
-    			System.out.println("Print Results: " + results.getString("path"));
+    			System.out.println("SelectPath() print results: " + results.getString("filepath"));
     			
-    			adPath.append(results.getString("path")+ "\n"); //for each iteration we append this string to the adPath of type StringBuffer
+    			adPath.append(results.getString("filepath")); //for each iteration we append this string to the adPath of type StringBuffer
     			
     		}
     		myStmt.close();
@@ -93,17 +92,16 @@ public class AdvertisementDatabase {
      * @throws SQLException if the fields of the database cannot be accessed
      */
     ///might wnat to take out id since that doesnt really matter
-    public String selectMediaType() {
+    public static String selectMediaTypeAndId() {
     	StringBuffer adMT = new StringBuffer(); //THis is a class that just allows us to modify strings
     	try {
     		Statement myStmt = dbConnect.createStatement(); //create a statement
     		results = myStmt.executeQuery("Select media_type,id from advertisements"); //from the advertisements table select Path field
     		
     		while(results.next()) {
-    			//UNCOMMENT IF YOU WANNA SEE IN CONSOLE
-    			//System.out.println("ID and Media type: " + results.getString("id") + ","+ results.getString("media_type"));
+    			System.out.println("SelectMediaTypeAndId() print results: " + results.getString("id") + ","+ results.getString("media_type"));
     			
-    			adMT.append(results.getString("id") + ","+ results.getString("media_type")); //for each iteration we append this string to the adPath of type StringBuffer
+    			adMT.append(results.getString("id") + ", "+ results.getString("media_type")); //for each iteration we append this string to the adPath of type StringBuffer
     			
     		}
     		myStmt.close();
@@ -114,36 +112,11 @@ public class AdvertisementDatabase {
     }
     
     /**
-     * selects and returns the title and description of each Ad
-     * 
-     * @throws SQLException if the fields of the database cannot be accessed
-     */
-    public String selectDesc() throws SQLException{
-    	StringBuffer adTitleDesc = new StringBuffer(); //THis is a class that just allows us to modify strings
-    	try {
-    		Statement myStmt = dbConnect.createStatement(); //create a statement
-    		results = myStmt.executeQuery("Select description from advertisements"); //from the advertisements table select all the fields
-    		
-    		while(results.next()) {
-    			//UNCOMMENT IF YOU WANNA SEE IN CONSOLE
-    			//System.out.println("Desc: " + results.getString("description")); //might want to take this out so it doesnt print randomly
-    			
-    			adTitleDesc.append(results.getString("description") + "\n"); //for each iteration we append this string to the adtitle of type StringBuffer
-    			
-    		}
-    		myStmt.close();
-    	}catch(SQLException e) {
-    		e.printStackTrace();
-    	}
-    	return adTitleDesc.toString();
-    }
-    
-    /**
      * CLose the connection to the database
      * @throws SQLException if there is an error closing database connection
      */
     
-    public void close() {
+    public static void close() {
     	try {
     		results.close();
     		dbConnect.close();
@@ -151,10 +124,17 @@ public class AdvertisementDatabase {
     		e.printStackTrace();
     	}
     }
-    
-    public static void main(String[] args) throws SQLException {
-    	AdvertisementDatabase adb = new AdvertisementDatabase();
-		adb.initializeConnection();
-		adb.selectPath();
-    }
+     //Uncomment main method to see results of queries
+    /*public static void main(String[] args) throws SQLException {
+    	new AdvertisementDatabase();
+    	try {
+			Connection conn = AdvertisementDatabase.initializeConnection();
+	    	selectAd();
+	    	selectPath();
+	    	selectMediaTypeAndId();
+	    	close();
+    	} catch (SQLException e) {
+			e.printStackTrace();
+		}        
+    } */
 }

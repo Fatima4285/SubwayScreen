@@ -1,61 +1,39 @@
 package ca.ucalgary.edu.ensf380;
 
 /** 
- * Advertisement class is responsible for presenting advertisements 
- * (with specific media type, id, and display duration) on the main screen. 
+ * Advertisement is a class that instantiates the advertisements 
+ * present in the database using the given file path
  */
-class Advertisement implements Displayable{
-	private String mediaType;
-	private String adID;
+public class Advertisement {
+	protected String filePath;
 	private static final int DISPLAYDURATION = 10;
 	
 	 /**
-     * Constructs an Advertisement with the specified media type and ad ID.
+     * Constructs an Advertisement with the specified filepath
      *
      * @param mediaType the type of media for the advertisement
-     * @param adID the ID of the advertisement
      */
 	
-	public Advertisement(String mediaType, String adID) {
-		this.mediaType = mediaType;
-		this.adID = adID;
+	public Advertisement(String filePath) {
+		this.filePath = filePath;
 	}
 	
-	/**
-     * Setting the media type for the advertisement.
-     *
-     * @param mediaType the new media type
-     */
-	public void setMediaType(String mediaType) {
-		this.mediaType = mediaType;
-	}
-	
-
     /**
-     * Setting the ad ID of the advertisement.
+     * Setting the filePath of the advertisement.
      *
-     * @param adID the new ad ID
+     * @param filePath the new filePath
      */
-	public void setAdID(String adID) {
-		this.adID = adID;
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 	
 	/**
-     * Retrieving the media type of an advertisement.
+     * Retrieving the file path of an advertisement.
      *
-     * @return the media type
+     * @return the file path
      */
-	public String getMediaType() {
-		return mediaType;
-	}
-	
-	 /**
-     * Retrieving the ad ID of an advertisement.
-     *
-     * @return the ad ID
-     */
-	public String getAdID() {
-		return adID;
+	public String getFilePath() {
+		return filePath;
 	}
 	
 	 /**
@@ -63,23 +41,7 @@ class Advertisement implements Displayable{
      *
      * @return the display duration in seconds
      */
-	public static int getDisplayDuration() {
+	public int getDisplayDuration() {
 		return DISPLAYDURATION;
 	}
-	
-	/**
-     * Inherited method from displayable to display add.
-     *
-     */
-	@Override
-	public void display() {
-		//initailize a connection w the database
-		AdvertisementDatabase adb = new AdvertisementDatabase();
-		
-		
-	    System.out.println("Media Type: " + mediaType);
-	    System.out.println("Ad ID: " + adID);
-	    System.out.println("Display Duration: " + DISPLAYDURATION + " seconds");
-	}
-
 }

@@ -1,5 +1,7 @@
 package ca.ucalgary.edu.ensf380;
 
+
+
 import java.sql.*;
 
 /**
@@ -11,8 +13,8 @@ public class AdvertisementDatabase {
 	private static String URL = "jdbc:mysql://localhost:3306/advertisement";
     private static String USERNAME = "Mahdi";
     private static String PASSWORD = "ensf380";
-    private static Connection dbConnect;
-    private static ResultSet results; //store the results of the query here
+    private Connection dbConnect;
+    private ResultSet results; //store the results of the query here
     
     /**
      * Default constructor
@@ -27,7 +29,7 @@ public class AdvertisementDatabase {
      * 
      * @throws SQLException if a database access error occurs or the URL is null
      */
-    public static Connection initializeConnection() throws SQLException {
+    public Connection initializeConnection() throws SQLException {
         try{
         	dbConnect = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         }catch(SQLException e) {
@@ -41,7 +43,7 @@ public class AdvertisementDatabase {
      * 
      * @throws SQLException if the fields of the database cannot be accessed
      */
-    public static String selectAd() throws SQLException{
+    public String selectAd() throws SQLException{
     	StringBuffer adInfo = new StringBuffer(); //THis is a class that just allows us to modify strings
     	try {
     		Statement myStmt = dbConnect.createStatement(); //create a statement
@@ -67,7 +69,7 @@ public class AdvertisementDatabase {
      * 
      * @throws SQLException if the fields of the database cannot be accessed
      */
-    public static String selectPath() throws SQLException{
+    public String selectPath() throws SQLException{
     	StringBuffer adPath = new StringBuffer(); //THis is a class that just allows us to modify strings
     	try {
     		Statement myStmt = dbConnect.createStatement(); //create a statement
@@ -92,7 +94,7 @@ public class AdvertisementDatabase {
      * @throws SQLException if the fields of the database cannot be accessed
      */
     ///might wnat to take out id since that doesnt really matter
-    public static String selectMediaTypeAndId() {
+    public String selectMediaTypeAndId() {
     	StringBuffer adMT = new StringBuffer(); //THis is a class that just allows us to modify strings
     	try {
     		Statement myStmt = dbConnect.createStatement(); //create a statement
@@ -116,7 +118,7 @@ public class AdvertisementDatabase {
      * @throws SQLException if there is an error closing database connection
      */
     
-    public static void close() {
+    public void close() {
     	try {
     		results.close();
     		dbConnect.close();

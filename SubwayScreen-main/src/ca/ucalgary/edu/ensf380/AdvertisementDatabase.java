@@ -1,142 +1,164 @@
 package ca.ucalgary.edu.ensf380;
 
-
-
 import java.sql.*;
 
 /**
  * The AdvertisementDatabase class is responsible for establishing a connection
- * to a database using the provided URL, username, and password.
- * This class is used to interact with the database for advertisement-related operations.
+ * to a database using the provided URL, username, and password. This class 
+ * is used to interact with the database for advertisement-related operations.
  */
 public class AdvertisementDatabase {
-	private static String URL = "jdbc:mysql://localhost:3306/advertisement";
-    private static String USERNAME = "Mahdi";
-    private static String PASSWORD = "ensf380";
-    private Connection dbConnect;
-    private ResultSet results; //store the results of the query here
+
+    private static final String URL = "jdbc:mysql://localhost:3306/advertisement";
+    private static final String USERNAME = "Mahdi";
+    private static final String PASSWORD = "ensf380";
     
+    private Connection dbConnect;
+    private ResultSet results;
+
     /**
-     * Default constructor
+     * Default constructor.
      */
     public AdvertisementDatabase() {
-
+        // No initialization required here.
     }
 
     /**
      * Initializes and returns a connection to the database.
-     * @return 
-     * 
-     * @throws SQLException if a database access error occurs or the URL is null
+     *
+     * @return The database connection.
+     * @throws SQLException If a database access error occurs or the URL is null.
      */
     public Connection initializeConnection() throws SQLException {
-        try{
-        	dbConnect = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        }catch(SQLException e) {
-        	e.printStackTrace();
+        try {
+            dbConnect = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return dbConnect;
-    } 
-    
-    /**
-     * selects and returns all the information associated with each Ad
-     * 
-     * @throws SQLException if the fields of the database cannot be accessed
-     */
-    public String selectAd() throws SQLException{
-    	StringBuffer adInfo = new StringBuffer(); //THis is a class that just allows us to modify strings
-    	try {
-    		Statement myStmt = dbConnect.createStatement(); //create a statement
-    		results = myStmt.executeQuery("Select * from advertisements"); //from the advertisements table select all the fields
-    		
-    		while(results.next()) {
-    		System.out.println("SelectAd() print results: " + results.getString("title") + ", " + results.getString("media_type") + ", " +
-    		results.getString("filepath"));
-    			
-    			adInfo.append(results.getString("title") + "," +
-    		results.getString("filepath") + "," + results.getString("media_type") + "\n"); //for each iteration we append this string to the adInfo of type StringBuffer
-    			
-    		}
-    		myStmt.close();
-    	}catch(SQLException e) {
-    		e.printStackTrace();
-    	}
-    	return adInfo.toString();
     }
-    
+
     /**
-     * selects and returns the path associated with each Ad
-     * 
-     * @throws SQLException if the fields of the database cannot be accessed
+     * Selects and returns all the information associated with each advertisement.
+     *
+     * @return A string containing all advertisement information.
+     * @throws SQLException If the fields of the database cannot be accessed.
      */
-    public String selectPath() throws SQLException{
-    	StringBuffer adPath = new StringBuffer(); //THis is a class that just allows us to modify strings
-    	try {
-    		Statement myStmt = dbConnect.createStatement(); //create a statement
-    		results = myStmt.executeQuery("Select filepath from advertisements"); //from the advertisements table select Path field
-    		
-    		while(results.next()) {
-    			System.out.println("SelectPath() print results: " + results.getString("filepath"));
-    			
-    			adPath.append(results.getString("filepath")); //for each iteration we append this string to the adPath of type StringBuffer
-    			
-    		}
-    		myStmt.close();
-    	}catch(SQLException e) {
-    		e.printStackTrace();
-    	}
-    	return adPath.toString();
+    public String selectAd() throws SQLException {
+        StringBuilder adInfo = new StringBuilder(); // Use StringBuilder for efficiency
+
+        try {
+            Statement myStmt = dbConnect.createStatement();
+            results = myStmt.executeQuery("SELECT * FROM advertisements");
+
+            while (results.next()) {
+                System.out.println("SelectAd() print results: " 
+                    + results.getString("title") + ", " 
+                    + results.getString("media_type") + ", " 
+                    + results.getString("filepath"));
+
+                adInfo.append(results.getString("title")).append(", ")
+                      .append(results.getString("filepath")).append(", ")
+                      .append(results.getString("media_type")).append("\n");
+            }
+
+            myStmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return adInfo.toString();
     }
-    
+
     /**
-     * selects and returns the id and mediaType associated with each Ad
-     * 
-     * @throws SQLException if the fields of the database cannot be accessed
+     * Selects and returns the path associated with each advertisement.
+     *
+     * @return A string containing all advertisement file paths.
+     * @throws SQLException If the fields of the database cannot be accessed.
      */
-    ///might wnat to take out id since that doesnt really matter
-    public String selectMediaTypeAndId() {
-    	StringBuffer adMT = new StringBuffer(); //THis is a class that just allows us to modify strings
-    	try {
-    		Statement myStmt = dbConnect.createStatement(); //create a statement
-    		results = myStmt.executeQuery("Select media_type,id from advertisements"); //from the advertisements table select Path field
-    		
-    		while(results.next()) {
-    			System.out.println("SelectMediaTypeAndId() print results: " + results.getString("id") + ","+ results.getString("media_type"));
-    			
-    			adMT.append(results.getString("id") + ", "+ results.getString("media_type")); //for each iteration we append this string to the adPath of type StringBuffer
-    			
-    		}
-    		myStmt.close();
-    	}catch(SQLException e) {
-    		e.printStackTrace();
-    	}
-    	return adMT.toString();
+    public String selectPath() throws SQLException {
+        StringBuilder adPath = new StringBuilder(); // Use StringBuilder for efficiency
+
+        try {
+            Statement myStmt = dbConnect.createStatement();
+            results = myStmt.executeQuery("SELECT filepath FROM advertisements");
+
+            while (results.next()) {
+                System.out.println("SelectPath() print results: " 
+                    + results.getString("filepath"));
+
+                adPath.append(results.getString("filepath")).append("\n");
+            }
+
+            myStmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return adPath.toString();
     }
-    
+
     /**
-     * CLose the connection to the database
-     * @throws SQLException if there is an error closing database connection
+     * Selects and returns the ID and media type associated with each advertisement.
+     *
+     * @return A string containing all advertisement IDs and media types.
+     * @throws SQLException If the fields of the database cannot be accessed.
      */
-    
-    public void close() {
-    	try {
-    		results.close();
-    		dbConnect.close();
-    	}catch(SQLException e) {
-    		e.printStackTrace();
-    	}
+    public String selectMediaTypeAndId() throws SQLException {
+        StringBuilder adMT = new StringBuilder(); // Use StringBuilder for efficiency
+
+        try {
+            Statement myStmt = dbConnect.createStatement();
+            results = myStmt.executeQuery("SELECT media_type, id FROM advertisements");
+
+            while (results.next()) {
+                System.out.println("SelectMediaTypeAndId() print results: " 
+                    + results.getString("id") + ", " 
+                    + results.getString("media_type"));
+
+                adMT.append(results.getString("id")).append(", ")
+                    .append(results.getString("media_type")).append("\n");
+            }
+
+            myStmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return adMT.toString();
     }
-     //Uncomment main method to see results of queries
-    /*public static void main(String[] args) throws SQLException {
-    	new AdvertisementDatabase();
-    	try {
-			Connection conn = AdvertisementDatabase.initializeConnection();
-	    	selectAd();
-	    	selectPath();
-	    	selectMediaTypeAndId();
-	    	close();
-    	} catch (SQLException e) {
-			e.printStackTrace();
-		}        
-    } */
+
+    /**
+     * Closes the connection to the database.
+     *
+     * @throws SQLException If there is an error closing the database connection.
+     */
+    public void close() throws SQLException {
+        try {
+            if (results != null) {
+                results.close();
+            }
+            if (dbConnect != null) {
+                dbConnect.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Uncomment the main method to see results of queries
+    /*
+    public static void main(String[] args) {
+        AdvertisementDatabase db = new AdvertisementDatabase();
+        try {
+            db.initializeConnection();
+            System.out.println(db.selectAd());
+            System.out.println(db.selectPath());
+            System.out.println(db.selectMediaTypeAndId());
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    */
 }

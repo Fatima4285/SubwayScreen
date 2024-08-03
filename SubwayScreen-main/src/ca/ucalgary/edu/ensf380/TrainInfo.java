@@ -1,6 +1,5 @@
 package ca.ucalgary.edu.ensf380;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -14,45 +13,57 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * The TrainInfo class handles loading station locations and train routes,
+ * updating the map data, and drawing the train routes and station locations.
+ */
 public class TrainInfo extends JPanel {
 
     private Map<String, Point> stationLocations;
+    private Map<String, String> stationNames;
     private Map<String, String[]> trainRoutes;
     private String enteredTrain;
     private String currentTrainId;
     private String[] currentRoute;
-    private static final String OUT_FOLDER_PATH = "C:\\Users\\hoode\\Downloads\\ensf380fall\\SubwayScreen\\SubwayScreen-main\\out";
+    private static final String OUT_FOLDER_PATH = "subwayscreen-main/out";
     private Timer timer;
-    private Dimension preferredSize;
-    private Image image;
 
+    /**
+     * Constructor for the TrainInfo class.
+     *
+     * @param enteredTrain The train selected by the user.
+     */
     public TrainInfo(String enteredTrain) {
         this.enteredTrain = enteredTrain;
         stationLocations = new HashMap<>();
+        stationNames = new HashMap<>();
         trainRoutes = new HashMap<>();
         currentTrainId = null;
         currentRoute = new String[0];
         setPreferredSize(new Dimension(1200, 800)); // Initial size
-        updatePreferredSize(); // Calculate preferred size based on station locations
 
         try {
-        	image = ImageIO.read(new File("C:\\Users\\hoode\\Downloads\\ensf380fall\\SubwayScreen\\SubwayScreen-main\\maps\\Trains.png"));
-            loadStationLocations(new File("C:\\Users\\hoode\\Downloads\\ensf380fall\\SubwayScreen\\SubwayScreen-main\\data\\subway.csv"));
-            clearOutFolder(); // Clear the out folder before loading files
-            loadInitialTrainRoutes(); // Load initial data
-
-            // Start the timer with a delay to ensure files are fully written
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    startCheckingForNewFiles();
-                }
-            }, 500); // Delay of 0.5 seconds
-
+            loadStationLocations(new File("SubwayScreen-main/data/subway.csv"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        clearOutFolder(); // Clear the out folder before loading files
+
+        try {
+            loadInitialTrainRoutes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } // Load initial data
+
+        // Start the timer with a delay to ensure files are fully written
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                startCheckingForNewFiles();
+            }
+        }, 500); // Delay of 0.5 seconds
 
         // Recalculate preferred size on component resize
         addComponentListener(new ComponentAdapter() {
@@ -63,17 +74,13 @@ public class TrainInfo extends JPanel {
         });
     }
 
+    /** Updates the size of the panel based on the current height and width. */
     private void updatePreferredSize() {
-        int minWidth = 0, minHeight = 0;
-        for (Point location : stationLocations.values()) {
-            minWidth = Math.max(minWidth, location.x);
-            minHeight = Math.max(minHeight, location.y);
-        }
-        // Add some padding
-        setPreferredSize(new Dimension(minWidth + 100, minHeight + 100));
+        setPreferredSize(new Dimension(getWidth(), getHeight()));
         revalidate(); // Ensure layout manager updates the panel size
     }
 
+    /** Clears all the files in the out folder so that files from the previous run aren't read accidentally. */
     private void clearOutFolder() {
         File directory = new File(OUT_FOLDER_PATH);
         File[] files = directory.listFiles(File::isFile);
@@ -84,27 +91,44 @@ public class TrainInfo extends JPanel {
         }
     }
 
+    /**
+     * Loads station locations and names from the subway.csv file.
+     *
+     * @param dataFile The subway.csv file with all station data.
+     * @throws IOException If a file I/O error occurs.
+     */
     private void loadStationLocations(File dataFile) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(dataFile));
-        String line;
-        boolean isFirstLine = true; // Skip the header line
-        while ((line = reader.readLine()) != null) {
-            if (isFirstLine) {
-                isFirstLine = false;
-                continue; // Skip the header line
-            }
-            String[] fields = line.split(",");
-            if (fields.length >= 7) {
-                String stationCode = fields[3].trim();
-                int x = (int) Double.parseDouble(fields[5].trim());
-                int y = (int) Double.parseDouble(fields[6].trim());
-                stationLocations.put(stationCode, new Point(x, y));
+        try (BufferedReader reader = new BufferedReader(new FileReader(dataFile))) {
+            String line;
+            boolean isFirstLine = true; // Skip the header line
+
+            while ((line = reader.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue; // Skip the header line
+                }
+
+                String[] fields = line.split(",");
+                if (fields.length >= 7) {
+                    String stationCode = fields[3].trim();
+                    int x = (int) Double.parseDouble(fields[5].trim());
+                    int y = (int) Double.parseDouble(fields[6].trim());
+                    String stationName = fields[4].trim(); 
+
+                    stationLocations.put(stationCode, new Point(x, y));
+                    stationNames.put(stationCode, stationName); // Store station code and station name
+                }
             }
         }
-        reader.close();
-        updatePreferredSize(); // Update panel size based on station locations
+
+        updatePreferredSize();
     }
 
+    /**
+     * Takes the file that was most recently changed and loads the train routes from it.
+     *
+     * @throws IOException if there is a file I/O error.
+     */
     private void loadInitialTrainRoutes() throws IOException {
         File newestFile = getLastModified(OUT_FOLDER_PATH);
         if (newestFile != null) {
@@ -112,25 +136,40 @@ public class TrainInfo extends JPanel {
         }
     }
 
+    /**
+     * Loads the train route and code from the newest file.
+     *
+     * @param newestFile This is the file that was most recently changed.
+     * @throws IOException if a file I/O error occurs.
+     */
     private void loadTrainRoutes(File newestFile) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(newestFile));
-        String line;
-        boolean isFirstLine = true;
-        while ((line = reader.readLine()) != null) {
-            if (isFirstLine) {
-                isFirstLine = false;
-                continue; // Skip the header line
-            }
-            String[] fields = line.split(",");
-            if (fields.length >= 5 && fields[1].trim().equals(enteredTrain)) {
-                currentTrainId = fields[1].trim();
-                currentRoute = new String[]{fields[2].trim(), fields[4].trim()};
+        try (BufferedReader reader = new BufferedReader(new FileReader(newestFile))) {
+            String line;
+            boolean isFirstLine = true; // Skip the header line
+
+            while ((line = reader.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
+
+                String[] fields = line.split(",");
+                if (fields.length >= 5 && fields[1].trim().equals(enteredTrain)) {
+                    currentTrainId = fields[1].trim();
+                    currentRoute = new String[]{fields[2].trim(), fields[4].trim()}; // Current station and destination
+                }
             }
         }
-        reader.close();
-        repaint(); // Update the display
+
+        repaint(); // Updates the display
     }
 
+    /**
+     * Uses the directory to retrieve the file that was recently changed.
+     *
+     * @param directoryFilePath The filepath directory.
+     * @return The most recently modified file, might return null if no file is found.
+     */
     private File getLastModified(String directoryFilePath) {
         File directory = new File(directoryFilePath);
         File[] files = directory.listFiles(File::isFile);
@@ -149,6 +188,7 @@ public class TrainInfo extends JPanel {
         return chosenFile;
     }
 
+    /** Checks for a new file in the out folder every 15 seconds. */
     private void startCheckingForNewFiles() {
         TimerTask task = new TimerTask() {
             @Override
@@ -156,9 +196,13 @@ public class TrainInfo extends JPanel {
                 checkForNewFiles();
             }
         };
+
         timer.scheduleAtFixedRate(task, 0, 15000); // Check every 15 seconds
     }
 
+    /**
+     * Checks for new train route files and loads the data from the most recent file.
+     */
     private void checkForNewFiles() {
         File newestFile = getLastModified(OUT_FOLDER_PATH);
         if (newestFile != null) {
@@ -170,71 +214,66 @@ public class TrainInfo extends JPanel {
         }
     }
 
+    /**
+     * Sets the train routes and repaints the panel.
+     *
+     * @param trainRoutes A hashmap of train routes where train ID and the value is an array.
+     */
     public void setTrainRoutes(Map<String, String[]> trainRoutes) {
         this.trainRoutes = trainRoutes;
         repaint();
     }
 
+    /** Paints the component and draws the station locations and train routes. */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (image != null) {
-            Image scaledImage = image.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
-            g.drawImage(scaledImage, 0, 0, this);
-        }
         drawStations(g);
         drawTrains(g);
     }
 
+    /** Draws the stations and colors them black. */
     private void drawStations(Graphics g) {
         int dotSize = 6;
-        int labelOffset = 8;
-
         g.setColor(Color.BLACK);
+
         for (Map.Entry<String, Point> entry : stationLocations.entrySet()) {
             String stationCode = entry.getKey();
             Point location = entry.getValue();
-            int x = (int) ((double) location.x / getWidth() * getWidth());
-            int y = (int) ((double) location.y / getHeight() * getHeight());
-            g.fillOval(x - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
-            g.drawString(stationCode, x + labelOffset, y);
+
+            if (getWidth() > 0 && getHeight() > 0) {
+                int x = (int) ((double) location.x / 1000 * getWidth());
+                int y = (int) ((double) location.y / 1000 * getHeight());
+                g.fillOval(x - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
+            }
         }
     }
 
+    /**
+     * Draws the train on the panel.
+     *
+     * @param g Graphics context used for painting.
+     */
     private void drawTrains(Graphics g) {
         if (currentRoute.length > 0) {
             String currentStationCode = currentRoute[0];
             Point currentLocation = stationLocations.get(currentStationCode);
 
             if (currentLocation != null) {
-                int x = (int) ((double) currentLocation.x / getWidth() * getWidth());
-                int y = (int) ((double) currentLocation.y / getHeight() * getHeight());
+                int x = (int) ((double) currentLocation.x / 1000 * getWidth());
+                int y = (int) ((double) currentLocation.y / 1000 * getHeight());
+
                 g.setColor(Color.RED);
                 g.fillOval(x - 10, y - 10, 20, 20);
-                g.drawString(currentTrainId, x + 15, y);
-            }
 
-            g.setColor(Color.BLACK);
-            int currentIndex = -1;
-            for (int i = 0; i < currentRoute.length; i++) {
-                if (currentRoute[i].equals(currentStationCode)) {
-                    currentIndex = i;
-                    break;
-                }
-            }
-
-            for (int i = -1; i <= 4; i++) {
-                if (currentIndex + i >= 0 && currentIndex + i < currentRoute.length) {
-                    String nextStationCode = currentRoute[currentIndex + i];
-                    Point location = stationLocations.get(nextStationCode);
-                    if (location != null) {
-                        int x = (int) ((double) location.x / getWidth() * getWidth());
-                        int y = (int) ((double) location.y / getHeight() * getHeight());
-                        g.fillOval(x - 5, y - 5, 10, 10);
-                    }
+                // Display the station name
+                String stationName = stationNames.get(currentStationCode);
+                if (stationName != null) {
+                    g.drawString(stationName, x + 15, y);
                 }
             }
         }
     }
 }
+
 

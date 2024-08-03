@@ -1,6 +1,5 @@
 package ca.ucalgary.edu.ensf380;
 
-//main included in this file
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,15 +10,16 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 
 public class MainScreen extends Thread {
+
     private static JLabel tempLabel;
     private static JLabel windLabel;
     private static JLabel rainLabel;
@@ -29,37 +29,16 @@ public class MainScreen extends Thread {
     private static JPanel mapPanel;
     private static List<Advertisement> ads = new ArrayList<>();
     private static int currentAdIndex = 0;
+    private static AdvertisementDatabase advertisementDatabase;
+    private static String cityName;
 
     public MainScreen() {
-        start(); // Starts the thread upon class initialization
-    }
-
-    // Starts a new thread
-    public void run() {
-        while (true) {
-            displayTime();
-        }
-    }
-
-    public static void displayTime() {
-        LocalDateTime localDate = LocalDateTime.now();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("h:mm:ss a");
-        String dtfTime = dtf.format(localDate);
-        timeLabel.setText("Time: " + dtfTime);
-    }
-
-    public static void main(String[] args) {
-        if (args.length != 1) {
-            System.out.println("Please enter a command line argument for city name");
-            return;
-        }
-        String cityName = args[0]; // Set the command line argument to cityName
-
         // Create instances of other classes using the provided constructors
         WeatherParser weatherParser = new WeatherParser(cityName);
         WeatherService weatherService = new WeatherService(weatherParser);
         String endpoint = "https://newsapi.org/v2/top-headlines?country=us&apiKey=2fba803407f040ccb4a075a558ea4a24";
         NewsProvider newsProvider = new NewsProvider(endpoint);
+        advertisementDatabase = new AdvertisementDatabase();
 
         // Initialize GUI components
         JFrame frame = new JFrame("Subway Screen");
@@ -68,7 +47,7 @@ public class MainScreen extends Thread {
         frame.setLayout(new BorderLayout()); // Changed layout to BorderLayout
 
         // Weather section
-        weatherService.updateWeatherData();
+        weatherService.updateWeatherData(); // Update weather data
         String temperature = weatherService.getDailyTemperature();
         String wind = weatherService.getDailyWind();
         String rain = weatherService.getDailyRain();
@@ -86,7 +65,6 @@ public class MainScreen extends Thread {
         weatherPanel.add(windLabel);
         weatherPanel.add(rainLabel);
         weatherPanel.add(timeLabel);
-
         frame.add(weatherPanel, BorderLayout.NORTH);
 
         // News section
@@ -102,10 +80,10 @@ public class MainScreen extends Thread {
         mapLabel = new JLabel();
         mapPanel.add(mapLabel);
         frame.add(mapPanel, BorderLayout.CENTER); // Add map panel to center
-        
+
         // Load Ads
         loadAdsFromDatabase();
-        
+
         // Timer to handle map and advertisement display
         Timer timer = new Timer();
         TimerTask adTask = new TimerTask() {
@@ -133,25 +111,48 @@ public class MainScreen extends Thread {
         timer.schedule(adTask, 0, 15000);
 
         frame.setVisible(true);
+        start(); // Starts the thread upon class initialization
+    }
+
+    // Starts a new thread
+    public void run() {
+        while (true) {
+            displayTime();
+        }
+    }
+
+    public static void displayTime() {
+        LocalDateTime localDate = LocalDateTime.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("h:mm:ss a");
+        String dtfTime = dtf.format(localDate);
+        timeLabel.setText("Time: " + dtfTime);
+    }
+
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Please enter a command line argument for city name");
+            return;
+        }
+        cityName = args[0]; // Set the command line argument to cityName
 
         // Instantiate MainScreen with all the objects
-        MainScreen mainScreen = new MainScreen();
+        new MainScreen();
     }
-    
+
     private static void loadAdsFromDatabase() {
-        try (Connection conn = AdvertisementDatabase.initializeConnection();
+        try (Connection conn = advertisementDatabase.initializeConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM Advertisements")) {
 
             while (rs.next()) {
                 String filePath = rs.getString("filepath");
                 ads.add(new Advertisement(filePath));
-                }
-            } catch (SQLException e) {
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
+
     private static void showMapImage() {
         // Load the map image. Update this path as needed.
         String mapImagePath = "SubwayScreen-main/maps/Trains.png";
@@ -159,7 +160,7 @@ public class MainScreen extends Thread {
         Image img = mapImageIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, 500, Image.SCALE_SMOOTH); // Adjust size as needed
         mapLabel.setIcon(new ImageIcon(img));
     }
-    
+
     public static void showAd(Advertisement ad) {
         // Load image
         File file = new File(ad.getFilePath());
@@ -173,3 +174,4 @@ public class MainScreen extends Thread {
         mapLabel.setIcon(new ImageIcon(img));
     }
 }
+

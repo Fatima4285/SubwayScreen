@@ -73,7 +73,7 @@ public class MyApp2 extends JFrame implements ActionListener {
         
         // Launch the executable jar file
         try {
-        	String[] command = {"java", "-jar", "C:/Users/hoode/Downloads/ensf380fall/SubwayScreen/SubwayScreen-main/exe/SubwaySimulator.jar", "--in", "C:/Users/hoode/Downloads/ensf380fall/SubwayScreen/SubwayScreen-main/data/subway.csv", "--out", "C:/Users/hoode/Downloads/ensf380fall/SubwayScreen/SubwayScreen-main/out"};
+        	String[] command = {"java", "-jar", "./exe/SubwaySimulator.jar", "--in", "./data/subway.csv", "--out", "./out"};
         	process = new ProcessBuilder(command).start();
             InputStream inputStream = process.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));

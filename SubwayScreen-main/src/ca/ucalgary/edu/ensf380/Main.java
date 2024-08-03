@@ -65,11 +65,10 @@ public class Main extends JFrame {
         windLabel = new JLabel("Wind: ");
         rainLabel = new JLabel("Rain: ");
         timeLabel = new JLabel("Time: ");
-        weatherPanel.add(timeLabel);
         weatherPanel.add(tempLabel);
         weatherPanel.add(windLabel);
         weatherPanel.add(rainLabel);
-
+        weatherPanel.add(timeLabel);
 
         JPanel mapPanel = new JPanel();
         mapPanel.setBackground(Color.WHITE);

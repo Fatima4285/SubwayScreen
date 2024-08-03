@@ -14,13 +14,8 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="SubwayScreen-main/exe/SubwaySimulator.jar"/>
 	<classpathentry kind="lib" path="libs/mysql-connector-j-9.0.0.jar"/>
-	<classpathentry kind="lib" path="libs/byte-buddy-1.14.15.jar"/>
-	<classpathentry kind="lib" path="libs/byte-buddy-agent-1.14.15.jar"/>
+	<classpathentry kind="lib" path="libs/WeatherParserJar.jar"/>
 	<classpathentry kind="lib" path="libs/jsoup-1.18.1.jar"/>
-	<classpathentry kind="lib" path="libs/WeatherParserJar2.jar"/>
-	<classpathentry kind="lib" path="libs/mockito-core-5.12.0.jar"/>
-	<classpathentry kind="lib" path="libs/byte-buddy-agent-1.14.15.jar"/>
-	<classpathentry kind="lib" path="libs/byte-buddy-1.14.15.jar"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
 			<attribute name="test" value="true"/>
@@ -41,11 +36,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="libs/WeatherParserJar2.jar"/>
-	<classpathentry kind="lib" path="libs/byte-buddy-1.14.15.jar"/>
-	<classpathentry kind="lib" path="libs/byte-buddy-agent-1.14.15.jar"/>
-	<classpathentry kind="lib" path="libs/mockito-core-5.12.0.jar"/>
-	<classpathentry kind="lib" path="libs/mysql-connector-j-9.0.0.jar"/>
-	<classpathentry kind="lib" path="libs/jsoup-1.18.1.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/junit-jupiter-api_5.10.2.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://junit.org/junit5/docs/current/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

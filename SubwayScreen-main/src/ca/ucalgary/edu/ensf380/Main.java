@@ -2,91 +2,41 @@ package ca.ucalgary.edu.ensf380;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.event.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Map;
 
-public class Main extends JFrame {
+public class Main extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
     private JTextArea outputTextArea;
+    private JButton stopButton;
     private Process process;
     private SimpleDateFormat dateFormat;
     private TrainInfo trainMapPanel;
     private ExecutorService executorService;
     private static String enteredTrain;
-    private static JLabel tempLabel;
-    private static JLabel windLabel;
-    private static JLabel rainLabel;
-    private static JLabel timeLabel;
-    private static JPanel newsPanel;
-    private static JLabel mapLabel;
-    private static List<Advertisement> ads = new ArrayList<>();
-    private static int currentAdIndex = 0;
-    private static String cityName;
-    private static JPanel adPanel; 
-    private static AdvertisementDatabase advertisementDatabase;
 
-    public Main(String cityName, String enteredTrain) {
+    public Main() {
         super("Subway Simulator Screen");
-
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        dateFormat = new SimpleDateFormat("HH:mm:ss");
 
+        dateFormat = new SimpleDateFormat("HH:mm:ss");
         outputTextArea = new JTextArea();
         outputTextArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(outputTextArea);
-
+        stopButton = new JButton("Stop");
+        stopButton.addActionListener(this);
         trainMapPanel = new TrainInfo(enteredTrain);
-
-        advertisementDatabase = new AdvertisementDatabase();
-
-        adPanel = new JPanel();
-        adPanel.setLayout(new CardLayout());
-
-        WeatherParser weatherParser = new WeatherParser(cityName);
-        JPanel weatherPanel = new JPanel();
-        weatherPanel.setLayout(new BoxLayout(weatherPanel, BoxLayout.Y_AXIS));
-        tempLabel = new JLabel("Temperature: ");
-        windLabel = new JLabel("Wind: ");
-        rainLabel = new JLabel("Rain: ");
-        timeLabel = new JLabel("Time: ");
-        weatherPanel.add(tempLabel);
-        weatherPanel.add(windLabel);
-        weatherPanel.add(rainLabel);
-        weatherPanel.add(timeLabel);
-
-        JPanel mapPanel = new JPanel();
-        mapPanel.setBackground(Color.WHITE);
-        mapLabel = new JLabel();
-        mapPanel.add(mapLabel);
-
-        adPanel.add(mapPanel, "Map");
-        adPanel.add(new JPanel(), "Ad"); 
-
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, trainMapPanel, adPanel);
-        splitPane.setDividerLocation(600);
 
         JPanel contentPane = new JPanel(new BorderLayout());
         contentPane.add(scrollPane, BorderLayout.CENTER);
-        contentPane.add(weatherPanel, BorderLayout.NORTH);
-        contentPane.add(splitPane, BorderLayout.CENTER);
-
+        contentPane.add(stopButton, BorderLayout.SOUTH);
+        contentPane.add(trainMapPanel, BorderLayout.EAST);
         setContentPane(contentPane);
+
         setSize(1200, 600);
         setVisible(true);
 
@@ -95,9 +45,9 @@ public class Main extends JFrame {
         try {
             String[] command = {
                 "java", "-jar",
-                "subwayscreen-main/exe/SubwaySimulator.jar",
-                "--in", "subwayscreen-main/data/subway.csv",
-                "--out", "subwayscreen-main/out"
+                "C:\\Users\\hoode\\Downloads\\ensf380fall\\SubwayScreen\\SubwayScreen-main\\exe\\SubwaySimulator.jar",
+                "--in", "C:\\Users\\hoode\\Downloads\\ensf380fall\\SubwayScreen\\SubwayScreen-main\\data\\subway.csv",
+                "--out", "C:\\Users\\hoode\\Downloads\\ensf380fall\\SubwayScreen\\SubwayScreen-main\\out"
             };
             process = new ProcessBuilder(command).start();
             executorService.submit(() -> {
@@ -137,59 +87,6 @@ public class Main extends JFrame {
             }
             System.exit(0);
         }));
-
-        loadAdsFromDatabase();
-        Timer adTimer = new Timer();
-        TimerTask adTask = new TimerTask() {
-            @Override
-            public void run() {
-                if (currentAdIndex < ads.size()) {
-                    showAd(ads.get(currentAdIndex));
-                    currentAdIndex++;
-                } else {
-                    currentAdIndex = 0;
-                    if (!ads.isEmpty()) {
-                        showAd(ads.get(currentAdIndex));
-                        currentAdIndex++;
-                    }
-                }
-
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        showMapImage();
-                    }
-                }, 10000); // Delay of 10 seconds
-            }
-        };
-        adTimer.schedule(adTask, 0, 15000);
-
-        WeatherService weatherService = new WeatherService(weatherParser);
-        String endpoint = "https://newsapi.org/v2/top-headlines?country=us&apiKey=2fba803407f040ccb4a075a558ea4a24";
-        NewsProvider newsProvider = new NewsProvider(endpoint);
-
-        weatherService.updateWeatherData();
-        String temperature = weatherService.getDailyTemperature();
-        String wind = weatherService.getDailyWind();
-        String rain = weatherService.getDailyRain();
-
-        tempLabel.setText("Temperature: " + temperature);
-        windLabel.setText("Wind: " + wind);
-        rainLabel.setText("Rain: " + rain);
-
-        Timer timeTimer = new Timer();
-        timeTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                SwingUtilities.invokeLater(() -> displayTime());
-            }
-        }, 0, 1000); 
-
-        newsProvider.display();
-        newsPanel = newsProvider.getNewsPanel();
-        newsPanel.setBackground(Color.ORANGE);
-        newsPanel.setPreferredSize(new Dimension(getWidth(), 100));
-        add(newsPanel, BorderLayout.SOUTH);
     }
 
     private String formatOutput(String line) {
@@ -215,56 +112,20 @@ public class Main extends JFrame {
         }
     }
 
-    private void loadAdsFromDatabase() {
-        try (Connection conn = advertisementDatabase.initializeConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM Advertisements")) {
-
-            while (rs.next()) {
-                String filePath = rs.getString("filepath");
-                ads.add(new Advertisement(filePath));
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == stopButton) {
+            if (process != null) {
+                process.destroy();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            stopButton.setEnabled(false);
         }
-    }
-
-    private void showMapImage() {
-        String mapImagePath = "SubwayScreen-main/maps/Trains.png"; 
-        ImageIcon mapImageIcon = new ImageIcon(mapImagePath);
-        Image img = mapImageIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, 500, Image.SCALE_SMOOTH);
-        mapLabel.setIcon(new ImageIcon(img));
-    }
-
-    public static void showAd(Advertisement ad) {
-        File file = new File(ad.getFilePath());
-        if (!file.exists()) {
-            System.err.println("File not found: " + file.getAbsolutePath());
-            return;
-        }
-
-        ImageIcon adImageIcon = new ImageIcon(ad.getFilePath());
-        Image img = adImageIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, 500, Image.SCALE_SMOOTH);
-        mapLabel.setIcon(new ImageIcon(img));
-    }
-
-    public static void displayTime() {
-        LocalDateTime localDate = LocalDateTime.now();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("h:mm:ss a");
-        String dtfTime = dtf.format(localDate);
-        timeLabel.setText("Time: " + dtfTime);
     }
 
     public static void main(String[] args) {
-        if (args.length < 2) {
-            System.out.println("Please enter command line arguments for city name and train number.");
-            return;
+        if (args.length > 0) {
+            enteredTrain = args[0];
         }
-
-        cityName = args[0];
-        enteredTrain = args[1];
-
-        SwingUtilities.invokeLater(() -> new Main(cityName, enteredTrain));
+        SwingUtilities.invokeLater(() -> new Main());
     }
 }
-

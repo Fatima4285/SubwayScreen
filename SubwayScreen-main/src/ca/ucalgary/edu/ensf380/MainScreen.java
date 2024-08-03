@@ -29,16 +29,37 @@ public class MainScreen extends Thread {
     private static JPanel mapPanel;
     private static List<Advertisement> ads = new ArrayList<>();
     private static int currentAdIndex = 0;
-    private static AdvertisementDatabase advertisementDatabase;
-    private static String cityName;
 
     public MainScreen() {
-    	// Create instances of other classes using the provided constructors
+        start(); // Starts the thread upon class initialization
+    }
+
+    // Starts a new thread
+    public void run() {
+        while (true) {
+            displayTime();
+        }
+    }
+
+    public static void displayTime() {
+        LocalDateTime localDate = LocalDateTime.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("h:mm:ss a");
+        String dtfTime = dtf.format(localDate);
+        timeLabel.setText("Time: " + dtfTime);
+    }
+
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Please enter a command line argument for city name");
+            return;
+        }
+        String cityName = args[0]; // Set the command line argument to cityName
+
+        // Create instances of other classes using the provided constructors
         WeatherParser weatherParser = new WeatherParser(cityName);
         WeatherService weatherService = new WeatherService(weatherParser);
         String endpoint = "https://newsapi.org/v2/top-headlines?country=us&apiKey=2fba803407f040ccb4a075a558ea4a24";
         NewsProvider newsProvider = new NewsProvider(endpoint);
-        advertisementDatabase = new AdvertisementDatabase();
 
         // Initialize GUI components
         JFrame frame = new JFrame("Subway Screen");
@@ -47,7 +68,7 @@ public class MainScreen extends Thread {
         frame.setLayout(new BorderLayout()); // Changed layout to BorderLayout
 
         // Weather section
-        weatherService.updateWeatherData(); //update weather data
+        weatherService.updateWeatherData();
         String temperature = weatherService.getDailyTemperature();
         String wind = weatherService.getDailyWind();
         String rain = weatherService.getDailyRain();
@@ -112,38 +133,13 @@ public class MainScreen extends Thread {
         timer.schedule(adTask, 0, 15000);
 
         frame.setVisible(true);
-    	start(); // Starts the thread upon class initialization
-    }
-
-    // Starts a new thread
-    public void run() {
-        while (true) {
-            displayTime();
-        }
-    }
-
-    public static void displayTime() {
-        LocalDateTime localDate = LocalDateTime.now();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("h:mm:ss a");
-        String dtfTime = dtf.format(localDate);
-        timeLabel.setText("Time: " + dtfTime);
-    }
-
-    public static void main(String[] args) {
-        if (args.length != 1) {
-            System.out.println("Please enter a command line argument for city name");
-            return;
-        }
-        String cityName = args[0]; // Set the command line argument to cityName
-
-        
 
         // Instantiate MainScreen with all the objects
         MainScreen mainScreen = new MainScreen();
     }
     
     private static void loadAdsFromDatabase() {
-        try (Connection conn = advertisementDatabase.initializeConnection();
+        try (Connection conn = AdvertisementDatabase.initializeConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM Advertisements")) {
 

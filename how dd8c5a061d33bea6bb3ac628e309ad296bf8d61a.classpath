@@ -1,0 +1,30 @@
+[33mcommit dd8c5a061d33bea6bb3ac628e309ad296bf8d61a[m
+Author: Fatima Asif <fatima.asif@ucalgary.ca>
+Date:   Sat Aug 3 07:37:11 2024 -0600
+
+    Resolved conflict in .classpath
+
+[33mcommit 39a4db4a3d8dfccbf9bb06763bc0ae69322af827[m
+Author: Aroush Qureshi <aroushq1@gmail.com>
+Date:   Fri Aug 2 17:41:02 2024 -0600
+
+    DataRetrieverTest.java created all tests passing
+
+[33mcommit 6236b18b2265004dce8d40eddf7c76bbf3ac3753[m
+Author: Fatima Asif <fatima.asif@ucalgary.ca>
+Date:   Mon Jul 29 14:36:20 2024 -0600
+
+    Add data and out folders, update MainScreen and WeatherParser
+
+[33mcommit f1865f816495637ed067012aa860fb1511f58cbd[m
+Author: Fatima Asif <fatima.asif@ucalgary.ca>
+Date:   Mon Jul 22 20:41:30 2024 -0600
+
+    Updated AdvertisementDatabase and added project configuration files
+
+[33mcommit 24bf44499f5502ee4743e85ef5d998a3abe9b226[m
+Author: Aroush Qureshi <aroushq1@gmail.com>
+Date:   Mon Jul 22 16:33:09 2024 -0600
+
+    added dependencies to pom.xml file, also made some changes to data
+    retriever

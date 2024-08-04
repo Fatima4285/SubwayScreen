@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
+/**This class loads train and station information from the subway.csv file of the newest file in the out folder
+ * it then draws them and displays. */
 public class TrainInfo extends JPanel {
 
     private Map<String, Point> stationLocations;
@@ -22,6 +25,8 @@ public class TrainInfo extends JPanel {
     private static final String OUT_FOLDER_PATH = "subwayscreen-main/out";
     private Timer timer;
 
+    /**Class constructor initializes the variables such as stationLocations, stationNames, and trainRoutes,
+     *  and checks for new files every 0.5 seconds*/
     public TrainInfo() {
         stationLocations = new HashMap<>();
         stationNames = new HashMap<>();
@@ -62,11 +67,13 @@ public class TrainInfo extends JPanel {
         });
     }
 
+    /**Updates the preferred size of the panel to match the current size*/
     private void updatePreferredSize() {
         setPreferredSize(new Dimension(getWidth(), getHeight()));
         revalidate();
     }
 
+    /**clears all files from the Out folder to prevent reading old files*/ 
     private void clearOutFolder() {
         File directory = new File(OUT_FOLDER_PATH);
         File[] files = directory.listFiles(File::isFile);
@@ -76,7 +83,11 @@ public class TrainInfo extends JPanel {
             }
         }
     }
-
+    
+    /**Loads the station Locations from within the subway.csv file
+     * @param dataFile subway.csv file where all station information is
+     * @throws IOException if an error during file I/O occurs
+     * */
     private void loadStationLocations(File dataFile) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(dataFile))) {
             String line;
@@ -104,6 +115,9 @@ public class TrainInfo extends JPanel {
         repaint(); // Ensure stations are displayed immediately
     }
 
+    /**loads the initial train Routes from the most recent file
+     * @throws IOException if a file I/O error occurs
+     * */
     private void loadInitialTrainRoutes() throws IOException {
         File newestFile = getLastModified(OUT_FOLDER_PATH);
         if (newestFile != null) {
@@ -111,12 +125,17 @@ public class TrainInfo extends JPanel {
         }
     }
     
+    /**setter for train routes and repaints panel with the new data
+     * */
     public void setTrainRoutes(Map<String, String[]> trainRoutes) {
         this.trainRoutes = trainRoutes;
-        repaint(); // Ensure the panel is repainted with the new data
+        repaint(); 
     }
 
-
+    /**loads train routes from a file
+     * @param newestFile the filepath to load train route info from
+     * @throws IOException if there is an error opening a file
+     * */
     private void loadTrainRoutes(File newestFile) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(newestFile))) {
             String line;
@@ -141,6 +160,9 @@ public class TrainInfo extends JPanel {
         repaint(); // Ensure trains are displayed immediately
     }
 
+    /**get the file that was last modified inside the OUt folder
+     * @param directoryFilePath the directory of the file
+     * */
     private File getLastModified(String directoryFilePath) {
         File directory = new File(directoryFilePath);
         File[] files = directory.listFiles(File::isFile);
@@ -159,6 +181,7 @@ public class TrainInfo extends JPanel {
         return chosenFile;
     }
 
+    /**Checks for new files every 0.5 seconds*/
     private void checkForNewFiles() {
         File newestFile = getLastModified(OUT_FOLDER_PATH);
         if (newestFile != null) {
@@ -170,6 +193,8 @@ public class TrainInfo extends JPanel {
         }
     }
 
+    /**Paints the Station and Train components
+     * @param g Graphics object for painting*/
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -177,6 +202,8 @@ public class TrainInfo extends JPanel {
         drawTrains(g);
     }
 
+    /**draw the stations using coordinates as black dots
+     * @param g graphics object for painting*/
     private void drawStations(Graphics g) {
         int dotSize = 6;
         g.setColor(Color.BLACK);
@@ -193,6 +220,9 @@ public class TrainInfo extends JPanel {
         }
     }
 
+    /**draw trains (currently moving trains) as red dots and shows the station names next to the marker
+     * @param g graphics object for painting
+     * */
     private void drawTrains(Graphics g) {
         for (Map.Entry<String, String[]> entry : trainRoutes.entrySet()) {
             String trainId = entry.getKey();

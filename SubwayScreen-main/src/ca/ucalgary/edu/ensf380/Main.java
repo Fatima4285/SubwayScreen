@@ -2,6 +2,8 @@ package ca.ucalgary.edu.ensf380;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -17,9 +19,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Map;
 
 public class Main extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -41,6 +40,9 @@ public class Main extends JFrame {
     private static String cityName;
     private static JPanel adPanel;
     private static AdvertisementDatabase advertisementDatabase;
+
+    private CardLayout cardLayout;
+    private JPanel mainPanel;
 
     public Main(String cityName) {
         super("Subway Simulator Screen");
@@ -81,13 +83,15 @@ public class Main extends JFrame {
         adPanel.add(mapPanel, "Map");
         adPanel.add(new JPanel(), "Ad");
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, trainMapPanel, adPanel);
-        splitPane.setDividerLocation(600);
+        cardLayout = new CardLayout();
+        mainPanel = new JPanel(cardLayout);
+        mainPanel.add(adPanel, "AdPanel");
+        mainPanel.add(trainMapPanel, "TrainMapPanel");
 
         JPanel contentPane = new JPanel(new BorderLayout());
         contentPane.add(scrollPane, BorderLayout.CENTER);
         contentPane.add(weatherPanel, BorderLayout.NORTH);
-        contentPane.add(splitPane, BorderLayout.CENTER);
+        contentPane.add(mainPanel, BorderLayout.CENTER);
 
         setContentPane(contentPane);
         setSize(1200, 600);
@@ -146,25 +150,42 @@ public class Main extends JFrame {
         TimerTask adTask = new TimerTask() {
             @Override
             public void run() {
-                if (currentAdIndex < ads.size()) {
+                SwingUtilities.invokeLater(() -> {
+                    // Show the ad panel
                     showAd(ads.get(currentAdIndex));
                     currentAdIndex++;
-                } else {
-                    currentAdIndex = 0;
-                    if (!ads.isEmpty()) {
-                        showAd(ads.get(currentAdIndex));
-                        currentAdIndex++;
-                    }
-                }
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        showMapImage();
-                    }
-                }, 10000); // Delay of 10 seconds
+                    cardLayout.show(mainPanel, "AdPanel");
+                    // Update the ad after 10 seconds
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (currentAdIndex < ads.size()) {
+                                showAd(ads.get(currentAdIndex));
+                                currentAdIndex++;
+                            } else {
+                                currentAdIndex = 0;
+                                if (!ads.isEmpty()) {
+                                    showAd(ads.get(currentAdIndex));
+                                    currentAdIndex++;
+                                }
+                            }
+                        }
+                    }, 10000); // Update ad after 10 seconds
+
+                    // Schedule the transition to the train map panel after 10 seconds
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            SwingUtilities.invokeLater(() -> {
+                                // Show the train map panel
+                                cardLayout.show(mainPanel, "TrainMapPanel");
+                            });
+                        }
+                    }, 10000); // Show ad panel for 10 seconds
+                });
             }
         };
-        adTimer.schedule(adTask, 0, 15000);
+        adTimer.schedule(adTask, 0, 15000); // Run the task every 15 seconds
 
         WeatherService weatherService = new WeatherService(weatherParser);
         String endpoint = "https://newsapi.org/v2/top-headlines?country=us&apiKey=2fba803407f040ccb4a075a558ea4a24";
@@ -186,7 +207,6 @@ public class Main extends JFrame {
                 SwingUtilities.invokeLater(() -> displayTime());
             }
         }, 0, 1000);
-        
 
         newsProvider.display();
         newsPanel = newsProvider.getNewsPanel();
@@ -204,7 +224,7 @@ public class Main extends JFrame {
         if (line.startsWith("Train positions:")) {
             line = line.replace("Train positions:", "").trim();
             String[] routes = line.split("\n");
-            Map<String, String[]> trainRoutes = new HashMap<>();
+            HashMap<String, String[]> trainRoutes = new HashMap<>();
 
             for (String route : routes) {
                 String[] parts = route.split(":");
@@ -232,13 +252,6 @@ public class Main extends JFrame {
         }
     }
 
-    private void showMapImage() {
-        String mapImagePath = "SubwayScreen-main/maps/Trains.png";
-        ImageIcon mapImageIcon = new ImageIcon(mapImagePath);
-        Image img = mapImageIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, 500, Image.SCALE_SMOOTH);
-        mapLabel.setIcon(new ImageIcon(img));
-    }
-
     public static void showAd(Advertisement ad) {
         File file = new File(ad.getFilePath());
         if (!file.exists()) {
@@ -264,7 +277,6 @@ public class Main extends JFrame {
         }
 
         cityName = args[0];
-
 
         SwingUtilities.invokeLater(() -> new Main(cityName));
     }

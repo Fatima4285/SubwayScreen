@@ -39,5 +39,15 @@
 	<classpathentry kind="lib" path="/Users/aroush/Desktop/ENSF380/project2/libs/byte-buddy-agent-1.14.15.jar"/>
 	<classpathentry kind="lib" path="/Users/aroush/Desktop/ENSF380/project2/libs/byte-buddy-1.14.15.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="libs/cmu_time_awb.jar"/>
+	<classpathentry kind="lib" path="libs/cmu_us_kal.jar"/>
+	<classpathentry kind="lib" path="libs/cmudict04.jar"/>
+	<classpathentry kind="lib" path="libs/cmulex.jar"/>
+	<classpathentry kind="lib" path="libs/cmutimelex.jar"/>
+	<classpathentry kind="lib" path="libs/en_us.jar"/>
+	<classpathentry kind="lib" path="libs/freetts.jar"/>
+	<classpathentry kind="lib" path="libs/freetts-jsapi10.jar"/>
+	<classpathentry kind="lib" path="libs/jsapi.jar"/>
+	<classpathentry kind="lib" path="libs/mbrola.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

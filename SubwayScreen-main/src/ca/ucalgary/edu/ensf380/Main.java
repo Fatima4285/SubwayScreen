@@ -22,7 +22,6 @@ import java.sql.Statement;
 
 //comitting a comment
 public class Main extends JFrame {
-    private static final long serialVersionUID = 1L;
 
     private JTextArea outputTextArea;
     private Process process;

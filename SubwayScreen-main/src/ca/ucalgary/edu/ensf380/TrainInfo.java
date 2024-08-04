@@ -68,13 +68,13 @@ public class TrainInfo extends JPanel {
     }
 
     /**Updates the preferred size of the panel to match the current size*/
-    private void updatePreferredSize() {
+    public void updatePreferredSize() {
         setPreferredSize(new Dimension(getWidth(), getHeight()));
         revalidate();
     }
 
     /**clears all files from the Out folder to prevent reading old files*/ 
-    private void clearOutFolder() {
+    public void clearOutFolder() {
         File directory = new File(OUT_FOLDER_PATH);
         File[] files = directory.listFiles(File::isFile);
         if (files != null) {
@@ -88,7 +88,7 @@ public class TrainInfo extends JPanel {
      * @param dataFile subway.csv file where all station information is
      * @throws IOException if an error during file I/O occurs
      * */
-    private void loadStationLocations(File dataFile) throws IOException {
+    public void loadStationLocations(File dataFile) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(dataFile))) {
             String line;
             boolean isFirstLine = true;
@@ -118,7 +118,7 @@ public class TrainInfo extends JPanel {
     /**loads the initial train Routes from the most recent file
      * @throws IOException if a file I/O error occurs
      * */
-    private void loadInitialTrainRoutes() throws IOException {
+    public void loadInitialTrainRoutes() throws IOException {
         File newestFile = getLastModified(OUT_FOLDER_PATH);
         if (newestFile != null) {
             loadTrainRoutes(newestFile);
@@ -136,7 +136,7 @@ public class TrainInfo extends JPanel {
      * @param newestFile the filepath to load train route info from
      * @throws IOException if there is an error opening a file
      * */
-    private void loadTrainRoutes(File newestFile) throws IOException {
+    public void loadTrainRoutes(File newestFile) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(newestFile))) {
             String line;
             boolean isFirstLine = true;
@@ -163,7 +163,7 @@ public class TrainInfo extends JPanel {
     /**get the file that was last modified inside the OUt folder
      * @param directoryFilePath the directory of the file
      * */
-    private File getLastModified(String directoryFilePath) {
+    public File getLastModified(String directoryFilePath) {
         File directory = new File(directoryFilePath);
         File[] files = directory.listFiles(File::isFile);
         long lastModifiedTime = Long.MIN_VALUE;
@@ -182,7 +182,7 @@ public class TrainInfo extends JPanel {
     }
 
     /**Checks for new files every 0.5 seconds*/
-    private void checkForNewFiles() {
+    public void checkForNewFiles() {
         File newestFile = getLastModified(OUT_FOLDER_PATH);
         if (newestFile != null) {
             try {

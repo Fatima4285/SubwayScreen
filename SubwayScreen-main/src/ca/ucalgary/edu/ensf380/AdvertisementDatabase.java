@@ -6,6 +6,9 @@ import java.sql.*;
  * The AdvertisementDatabase class is responsible for establishing a connection
  * to a database using the provided URL, username, and password. This class 
  * is used to interact with the database for advertisement-related operations.
+ * 
+ * @version 1.0
+ * @since 2024-07-20
  */
 public class AdvertisementDatabase {
 

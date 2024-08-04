@@ -6,6 +6,9 @@ import java.io.IOException;
 
 /**
  * Provides the data collected by the WeatherParser class to the GUI
+ * 
+ * @version 1.0
+ * @since 2024-07-20
  * */
 public class WeatherService {
     private String temp;

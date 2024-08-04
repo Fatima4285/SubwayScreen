@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -20,7 +19,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-//comitting a comment
+/**
+ * The Main class is the main entry point for the Subway Simulator Screen application.
+ * It extends JFrame and sets up the GUI, handles the display of advertisements,
+ * updates weather information, train maps, and handles announcements.
+ * 
+ * @version 1.0
+ * @since 2024-07-20
+ */
 public class Main extends JFrame {
 
     private JTextArea outputTextArea;
@@ -40,11 +46,17 @@ public class Main extends JFrame {
     private static JPanel adPanel;
     private static AdvertisementDatabase advertisementDatabase;
     private static String enteredTrain;
-    private Announcement announcement; // Add this line
+    private Announcement announcement;
 
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
+    /**
+     * Constructs the Main JFrame for the Subway Simulator Screen application.
+     *
+     * @param cityName     The name of the city for weather information.
+     * @param enteredTrain The train number entered by the user.
+     */
     public Main(String cityName, String enteredTrain) {
         super("Subway Simulator Screen");
 
@@ -218,11 +230,22 @@ public class Main extends JFrame {
         add(newsPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Formats the output line with a timestamp.
+     *
+     * @param line The line to format.
+     * @return The formatted line with a timestamp.
+     */
     private String formatOutput(String line) {
         String timestamp = dateFormat.format(new Date());
         return String.format("[%s] %s", timestamp, line);
     }
 
+    /**
+     * Updates the map data based on the provided line.
+     *
+     * @param line The line containing train position data.
+     */
     private void updateMapData(String line) {
         if (line.startsWith("Train positions:")) {
             line = line.replace("Train positions:", "").trim();
@@ -241,6 +264,9 @@ public class Main extends JFrame {
         }
     }
 
+    /**
+     * Loads advertisements from the database.
+     */
     private void loadAdsFromDatabase() {
         try (Connection conn = advertisementDatabase.initializeConnection();
              Statement stmt = conn.createStatement();
@@ -255,6 +281,11 @@ public class Main extends JFrame {
         }
     }
 
+    /**
+     * Displays the specified advertisement.
+     *
+     * @param ad The advertisement to display.
+     */
     public static void showAd(Advertisement ad) {
         File file = new File(ad.getFilePath());
         if (!file.exists()) {
@@ -266,6 +297,9 @@ public class Main extends JFrame {
         mapLabel.setIcon(new ImageIcon(img));
     }
 
+    /**
+     * Displays the current time.
+     */
     public static void displayTime() {
         LocalDateTime localDate = LocalDateTime.now();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("h:mm:ss a");
@@ -273,6 +307,11 @@ public class Main extends JFrame {
         timeLabel.setText("Time: " + dtfTime);
     }
 
+    /**
+     * The main method, entry point of the application.
+     *
+     * @param args Command line arguments for city name and train number.
+     */
     public static void main(String[] args) {
         if (args.length < 2) {
             System.out.println("Please enter command line arguments for city name and train");

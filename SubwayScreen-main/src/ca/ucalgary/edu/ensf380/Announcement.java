@@ -1,14 +1,20 @@
 package ca.ucalgary.edu.ensf380;
 
 import java.util.Map;
-
-
 import java.io.*;
 import java.util.*;
 import javax.speech.Central;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
+/**
+ * The Announcement class is responsible for managing and generating 
+ * announcements for the subway system. It uses FreeTTS for text-to-speech 
+ * synthesis to vocalize announcements about train stations.
+ * 
+ * @version 1.0
+ * @since 2024-07-20
+ */
 public class Announcement {
 
     private String announcement;
@@ -24,6 +30,14 @@ public class Announcement {
     private Synthesizer synthesizer;
     private Map<Integer, String> trainToStationMap;
 
+    /**
+     * Constructs an Announcement object for a specific train.
+     * Initializes the station names and train-to-station mappings, and starts
+     * a thread to periodically update this information.
+     *
+     * @param enteredTrain the train number for which the announcement is made
+     * @param trainInfo    the TrainInfo object containing train information
+     */
     public Announcement(int enteredTrain, TrainInfo trainInfo) {
         this.enteredTrain = enteredTrain;
         this.trainInfo = trainInfo;
@@ -39,6 +53,10 @@ public class Announcement {
         new Thread(this::periodicUpdate).start();
     }
 
+    /**
+     * Periodically updates the train-to-station mappings and speaks the announcement.
+     * This method is run in a separate thread.
+     */
     private void periodicUpdate() {
         while (true) {
             try {
@@ -52,6 +70,9 @@ public class Announcement {
         }
     }
 
+    /**
+     * Updates the current station information based on the train-to-station mappings.
+     */
     private void updateStationInfo() {
         String currentStationCode = trainToStationMap.get(enteredTrain);
         if (currentStationCode != null) {
@@ -64,6 +85,9 @@ public class Announcement {
         }
     }
 
+    /**
+     * Populates the station names and types from the subway CSV file.
+     */
     private void populateStationNames() {
         try (BufferedReader reader = new BufferedReader(new FileReader(SUBWAY_FILE))) {
             String line;
@@ -85,6 +109,9 @@ public class Announcement {
         }
     }
 
+    /**
+     * Populates the train-to-station mappings from the latest train file.
+     */
     private void populateTrainToStationMap() {
         trainToStationMap.clear();
         File latestFile = getLatestTrainFile();
@@ -114,6 +141,11 @@ public class Announcement {
         }
     }
 
+    /**
+     * Retrieves the latest train file from the output folder.
+     *
+     * @return the latest train file or null if no file is found
+     */
     private File getLatestTrainFile() {
         File outFolder = new File(OUT_FOLDER);
         File[] files = outFolder.listFiles((dir, name) -> name.startsWith("Trains_") && name.endsWith(".csv"));
@@ -124,6 +156,12 @@ public class Announcement {
         return null;
     }
 
+    /**
+     * Determines the type of announcement based on the station name.
+     *
+     * @param stationName the name of the station
+     * @return the type of announcement ("short" or "long")
+     */
     private String determineAnnouncementType(String stationName) {
         if (stationNamesAndType.containsValue(stationName)) {
             return "short";
@@ -132,6 +170,11 @@ public class Announcement {
         }
     }
 
+    /**
+     * Creates the announcement text based on the current station name.
+     *
+     * @return the announcement text
+     */
     private String createAnnouncement() {
         if ("Unknown".equals(stationName)) {
             return "No current station available for the train.";
@@ -145,6 +188,9 @@ public class Announcement {
         }
     }
 
+    /**
+     * Creates and speaks the announcement using the FreeTTS synthesizer.
+     */
     private void createAndSpeakAnnouncement() {
         announcement = createAnnouncement();
         try {
@@ -167,8 +213,13 @@ public class Announcement {
         }
     }
 
+    /**
+     * Returns the current announcement text.
+     *
+     * @return the current announcement text
+     */
     public String getAnnouncement() {
         return this.announcement;
     }
-
 }
+

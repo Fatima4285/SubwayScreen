@@ -16,6 +16,8 @@ import java.util.List;
  * interacting with news data APIs. This class is designed to retrieve news data
  * from a specified endpoint.
  * 
+ * @version 1.0
+ * @since 2024-07-20
  */
 public class NewsAPI extends DataRetriever { 
 

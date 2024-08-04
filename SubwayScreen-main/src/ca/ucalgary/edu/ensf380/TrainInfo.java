@@ -14,7 +14,11 @@ import java.util.TimerTask;
 
 
 /**This class loads train and station information from the subway.csv file of the newest file in the out folder
- * it then draws them and displays. */
+ * it then draws them and displays. 
+ * 
+ * @version 1.0
+ * @since 2024-07-20
+ * */
 public class TrainInfo extends JPanel {
 
     private Map<String, Point> stationLocations;

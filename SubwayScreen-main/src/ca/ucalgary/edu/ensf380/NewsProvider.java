@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 /**
  * Represents a provider of news with a headline and content.
  * Implements the Displayable interface to allow displaying news.
+ * 
+ * @version 1.0
+ * @since 2024-07-20
  */
 public class NewsProvider extends NewsAPI implements Displayable {
 

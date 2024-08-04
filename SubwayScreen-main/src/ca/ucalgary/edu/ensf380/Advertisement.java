@@ -3,6 +3,9 @@ package ca.ucalgary.edu.ensf380;
 /** 
  * Advertisement is a class that instantiates the advertisements 
  * present in the database using the given file path
+ * 
+ * @version 1.0
+ * @since 2024-07-20
  */
 public class Advertisement {
 	protected String filePath;

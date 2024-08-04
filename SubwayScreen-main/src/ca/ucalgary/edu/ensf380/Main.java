@@ -152,9 +152,19 @@ public class Main extends JFrame {
             public void run() {
                 SwingUtilities.invokeLater(() -> {
                     // Show the ad panel
-                    showAd(ads.get(currentAdIndex));
-                    currentAdIndex++;
                     cardLayout.show(mainPanel, "AdPanel");
+
+                    // Schedule the transition to the train map panel after 10 seconds
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            SwingUtilities.invokeLater(() -> {
+                                // Show the train map panel
+                                cardLayout.show(mainPanel, "TrainMapPanel");
+                            });
+                        }
+                    }, 10000); // Show ad panel for 10 seconds
+
                     // Update the ad after 10 seconds
                     new Timer().schedule(new TimerTask() {
                         @Override
@@ -171,17 +181,6 @@ public class Main extends JFrame {
                             }
                         }
                     }, 10000); // Update ad after 10 seconds
-
-                    // Schedule the transition to the train map panel after 10 seconds
-                    new Timer().schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            SwingUtilities.invokeLater(() -> {
-                                // Show the train map panel
-                                cardLayout.show(mainPanel, "TrainMapPanel");
-                            });
-                        }
-                    }, 10000); // Show ad panel for 10 seconds
                 });
             }
         };

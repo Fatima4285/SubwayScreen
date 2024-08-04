@@ -21,13 +21,44 @@ import java.util.TimerTask;
  * */
 public class TrainInfo extends JPanel {
 
-    private Map<String, Point> stationLocations;
-    private Map<String, String> stationNames;
-    private Map<String, String[]> trainRoutes;
-    private String currentTrainId;
-    private String[] currentRoute;
-    private static final String OUT_FOLDER_PATH = "subwayscreen-main/out";
-    private Timer timer;
+	/**
+	 * A map that stores the locations of stations, where the key is the station ID
+	 * and the value is a Point representing the coordinates of the station.
+	 */
+	private Map<String, Point> stationLocations;
+
+	/**
+	 * A map that associates station IDs with their corresponding names.
+	 * The key is the station ID, and the value is the name of the station.
+	 */
+	private Map<String, String> stationNames;
+
+	/**
+	 * A map that holds the train routes. The key is the train ID, and the value is an array of station IDs
+	 * representing the route for that train.
+	 */
+	private Map<String, String[]> trainRoutes;
+
+	/**
+	 * The ID of the currently active train.
+	 */
+	private String currentTrainId;
+
+	/**
+	 * The route of the currently active train, represented as an array of station IDs.
+	 */
+	private String[] currentRoute;
+
+	/**
+	 * The path to the output folder for the train files.
+	 * This is a static final constant used to determine where output files will be stored.
+	 */
+	private static final String OUT_FOLDER_PATH = "subwayscreen-main/out";
+
+	/**
+	 * A Timer used for scheduling tasks in TrainInfo.
+	 */
+	private Timer timer;
 
     /**Class constructor initializes the variables such as stationLocations, stationNames, and trainRoutes,
      *  and checks for new files every 0.5 seconds*/
@@ -130,6 +161,7 @@ public class TrainInfo extends JPanel {
     }
     
     /**setter for train routes and repaints panel with the new data
+     * @param trainRoutes a hashmap of a String and String list that reprsentes line name and station names respectively 
      * */
     public void setTrainRoutes(Map<String, String[]> trainRoutes) {
         this.trainRoutes = trainRoutes;
@@ -166,6 +198,7 @@ public class TrainInfo extends JPanel {
 
     /**get the file that was last modified inside the OUt folder
      * @param directoryFilePath the directory of the file
+     * @return chosenFile which is thhe last modified file
      * */
     public File getLastModified(String directoryFilePath) {
         File directory = new File(directoryFilePath);

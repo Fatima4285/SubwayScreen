@@ -17,7 +17,7 @@ public class WeatherService {
     private WeatherParser weatherParser;
 
     /**Instantiates a weatherService object using a weatherParser object
-     * @rparam weatherParser takes in a weatherParser Object
+     * @param weatherParser takes in a weatherParser Object
      * */
     // Constructor
     public WeatherService(WeatherParser weatherParser) {

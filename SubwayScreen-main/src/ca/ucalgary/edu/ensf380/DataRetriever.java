@@ -22,7 +22,7 @@ public class DataRetriever {
     /**
      * Constructs a DataRetriever with the specified endpoint.
      * 
-     * @param eNDPOINT the endpoint URL for the API
+     * @param ENDPOINT the endpoint URL for the API
      */
     public DataRetriever(String ENDPOINT) {
         this.ENDPOINT = ENDPOINT;

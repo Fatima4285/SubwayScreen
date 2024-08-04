@@ -14,7 +14,7 @@ public class Advertisement {
 	 /**
      * Constructs an Advertisement with the specified filepath
      *
-     * @param mediaType the type of media for the advertisement
+     * @param filePath the type of media for the advertisement
      */
 	
 	public Advertisement(String filePath) {

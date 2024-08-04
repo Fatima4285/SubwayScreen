@@ -41,7 +41,8 @@ public class NewsAPI extends DataRetriever {
      * 
      * @return JsonNode containing the news data
      * @throws IOException if there is an issue with data retrieval or parsing
-     */
+     * @throws InterruptedException when code is interrupted
+     **/
     public JsonNode getNewsData() throws IOException, InterruptedException {
         String jsonResponse = fetchDataFromAPI();
         return objectMapper.readTree(jsonResponse);

@@ -6,35 +6,21 @@ import java.net.URL;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
- * Represents a provider of news with a headline and content.
- * Implements the Displayable interface to allow displaying news.
- * 
- * @version 1.0
- * @since 2024-07-20
+ * Provides news content by fetching data from a specified endpoint and displaying it in a Swing JPanel.
+ * This class is designed to handle news articles, including their titles, descriptions, and images.
  */
 public class NewsProvider extends NewsAPI implements Displayable {
 
     private String headline;
     private String content;
-	private JPanel newsPanel;
+    private JPanel newsPanel;
 
     /**
-     * Constructs a new NewsProvider with the specified endpoint, headline, and content.
-     * 
-     * @param ENDPOINT the endpoint URL for the news data API
-     * @param headline the headline of the news
-     * @param content the content of the news
+     * Overloaded constructor for testing purposes. Initializes the news provider with the given endpoint
+     * and sets default values for the headline and content. Configures the JPanel to display news content.
+     *
+     * @param ENDPOINT The endpoint URL to fetch news data from.
      */
-    public NewsProvider(String ENDPOINT, String headline, String content) {
-        super(ENDPOINT, "");
-        this.headline = headline;
-        this.content = content;
-        this.newsPanel = new JPanel();
-        this.newsPanel.setLayout(new BoxLayout(newsPanel, BoxLayout.Y_AXIS));
-        this.newsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-    }
-
-    // Overloaded constructor for testing purposes
     public NewsProvider(String ENDPOINT) {
         super(ENDPOINT, "");
         this.headline = "Default Headline";
@@ -44,26 +30,46 @@ public class NewsProvider extends NewsAPI implements Displayable {
         this.newsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
 
-    // Setters
+    /**
+     * Sets the headline of the news.
+     *
+     * @param headline The headline to set.
+     */
     public void setHeadline(String headline) {
         this.headline = headline;
     }
 
+    /**
+     * Sets the content of the news.
+     *
+     * @param content The content to set.
+     */
     public void setContent(String content) {
         this.content = content;
     }
 
-    // Getters
+    /**
+     * Gets the current headline of the news.
+     *
+     * @return The current headline.
+     */
     public String getHeadline() {
         return this.headline;
     }
 
+    /**
+     * Gets the current content of the news.
+     *
+     * @return The current content.
+     */
     public String getContent() {
         return this.content;
     }
 
     /**
-     * Displays the news using a Swing JFrame.
+     * Displays the news content in the {@link JPanel}. This method fetches news data from the specified endpoint,
+     * parses the data to extract the first article's title, description, and image, and updates the panel to show this information.
+     * If any errors occur during data retrieval or processing, appropriate error messages are shown to the user.
      */
     @Override
     public void display() {
@@ -86,7 +92,7 @@ public class NewsProvider extends NewsAPI implements Displayable {
             JsonNode article = articles.get(0); // Get the first article
 
             String title = article.has("title") ? article.get("title").asText() : "No title available";
-            String description = article.has("description") && !article.get("description").isNull() ? article.get("description").asText() : "";//IF THERE IS NO DESCRIPTION THEN SHOW NOTHING
+            String description = article.has("description") && !article.get("description").isNull() ? article.get("description").asText() : "";
             String imageUrl = article.has("urlToImage") && !article.get("urlToImage").isNull() ? article.get("urlToImage").asText() : null;
 
             JLabel titleLabel = new JLabel(title);
@@ -126,13 +132,21 @@ public class NewsProvider extends NewsAPI implements Displayable {
         }
     }
 
+    /**
+     * Returns the {@link JPanel} used to display news content.
+     *
+     * @return The news panel.
+     */
     public JPanel getNewsPanel() {
         return newsPanel;
     }
 
-
-
-
+    /**
+     * Main method for testing purposes. Initializes the {@link NewsProvider} with the endpoint provided as a command-line argument
+     * and displays the news.
+     *
+     * @param args Command-line arguments. The first argument should be the endpoint URL.
+     */
     public static void main(String[] args) {
         if (args.length < 1) {
             System.out.println("Usage: java NewsProvider <endpoint>");

@@ -28,27 +28,104 @@ import java.sql.Statement;
  * @since 2024-07-20
  */
 public class Main extends JFrame {
-
+	/**
+     * The JTextArea for displaying output text.
+     */
     private JTextArea outputTextArea;
+
+    /**
+     * The Process object for handling external processes.
+     */
     private Process process;
+
+    /**
+     * The SimpleDateFormat object for formatting dates.
+     */
     private SimpleDateFormat dateFormat;
+
+    /**
+     * The TrainInfo panel for displaying train map information.
+     */
     private TrainInfo trainMapPanel;
+
+    /**
+     * The ExecutorService for managing asynchronous tasks.
+     */
     private ExecutorService executorService;
+
+    /**
+     * The JLabel for displaying temperature information.
+     */
     private static JLabel tempLabel;
+
+    /**
+     * The JLabel for displaying wind information.
+     */
     private static JLabel windLabel;
+
+    /**
+     * The JLabel for displaying rain information.
+     */
     private static JLabel rainLabel;
+
+    /**
+     * The JLabel for displaying time information.
+     */
     private static JLabel timeLabel;
+
+    /**
+     * The JPanel for displaying news content.
+     */
     private static JPanel newsPanel;
+
+    /**
+     * The JLabel for displaying map information.
+     */
     private static JLabel mapLabel;
+
+    /**
+     * The list of Advertisement objects.
+     */
     private static List<Advertisement> ads = new ArrayList<>();
+
+    /**
+     * The index of the current advertisement being displayed.
+     */
     private static int currentAdIndex = 0;
+
+    /**
+     * The name of the city for which the information is displayed.
+     */
     private static String cityName;
+
+    /**
+     * The JPanel for displaying advertisements.
+     */
     private static JPanel adPanel;
+
+    /**
+     * The AdvertisementDatabase for managing advertisements.
+     */
     private static AdvertisementDatabase advertisementDatabase;
+
+    /**
+     * The name of the entered train.
+     */
     private static String enteredTrain;
+
+    /**
+     * The Announcement object for managing announcements.
+     */
     private Announcement announcement;
 
+    /**
+     * The CardLayout for managing multiple panels.
+     */
     private CardLayout cardLayout;
+
+    /**
+     * The main JPanel for displaying content.
+     */
     private JPanel mainPanel;
 
     /**

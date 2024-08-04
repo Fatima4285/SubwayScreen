@@ -29,7 +29,6 @@ public class Main extends JFrame {
     private SimpleDateFormat dateFormat;
     private TrainInfo trainMapPanel;
     private ExecutorService executorService;
-    private static String enteredTrain;
     private static JLabel tempLabel;
     private static JLabel windLabel;
     private static JLabel rainLabel;

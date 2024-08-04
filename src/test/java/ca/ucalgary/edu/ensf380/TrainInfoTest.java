@@ -9,15 +9,28 @@ import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the TrainInfo class.
+ * These tests include checking the functionality of private methods using reflection.
+ */
 public class TrainInfoTest {
 
     private TrainInfo trainInfo;
 
+    /**
+     * Sets up the test environment by initializing a TrainInfo instance.
+     */
     @BeforeEach
     public void setUp() {
         trainInfo = new TrainInfo();
     }
 
+    /**
+     * Tests the clearOutFolder method of TrainInfo using reflection.
+     * Verifies that the folder is cleared of all files.
+     * 
+     * @throws Exception if an error occurs while invoking the method or creating files
+     */
     @Test
     public void testClearOutFolder() throws Exception {
         // Use reflection to access the private method
@@ -43,6 +56,12 @@ public class TrainInfoTest {
         assertEquals(0, files.length, "The out folder should be empty after clearing.");
     }
 
+    /**
+     * Tests the getLastModified method of TrainInfo using reflection.
+     * Verifies that the newest file in the specified folder is returned.
+     * 
+     * @throws Exception if an error occurs while invoking the method or creating files
+     */
     @Test
     public void testGetLastModified() {
         // Access the private method using reflection
@@ -76,5 +95,3 @@ public class TrainInfoTest {
         }
     }
 }
-
-

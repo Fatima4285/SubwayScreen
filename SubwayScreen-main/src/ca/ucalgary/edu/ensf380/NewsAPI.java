@@ -16,16 +16,15 @@ import java.util.List;
  * interacting with news data APIs. This class is designed to retrieve news data
  * from a specified endpoint.
  * 
- * @version 1.0
- * @since 2024-07-20
  */
 public class NewsAPI extends DataRetriever { 
 
     private final ObjectMapper objectMapper;
     private final String keyword;
+    private final HttpClient httpClient;
 
     /**
-     * Constructs a NewsAPI instance with the specified endpoint.
+     * Constructs a NewsAPI instance with the specified endpoint and keyword.
      *
      * @param ENDPOINT The endpoint URL for the news data API.
      * @param keyword The keyword to filter news articles.
@@ -34,6 +33,21 @@ public class NewsAPI extends DataRetriever {
         super(ENDPOINT);
         this.objectMapper = new ObjectMapper(); // Instantiate ObjectMapper
         this.keyword = keyword;
+        this.httpClient = HttpClient.newHttpClient(); // Default HttpClient
+    }
+
+    /**
+     * Constructs a NewsAPI instance with the specified endpoint, keyword, and HttpClient.
+     *
+     * @param ENDPOINT The endpoint URL for the news data API.
+     * @param keyword The keyword to filter news articles.
+     * @param httpClient The HttpClient to use for making requests.
+     */
+    public NewsAPI(String ENDPOINT, String keyword, HttpClient httpClient) {
+        super(ENDPOINT);
+        this.objectMapper = new ObjectMapper(); // Instantiate ObjectMapper
+        this.keyword = keyword;
+        this.httpClient = httpClient;
     }
 
     /**
@@ -41,8 +55,7 @@ public class NewsAPI extends DataRetriever {
      * 
      * @return JsonNode containing the news data
      * @throws IOException if there is an issue with data retrieval or parsing
-     * @throws InterruptedException when code is interrupted
-     **/
+     */
     public JsonNode getNewsData() throws IOException, InterruptedException {
         String jsonResponse = fetchDataFromAPI();
         return objectMapper.readTree(jsonResponse);
@@ -54,7 +67,7 @@ public class NewsAPI extends DataRetriever {
      * @param articles JsonNode containing the articles to be filtered
      * @return List<JsonNode> of filtered articles
      */
-    private List<JsonNode> filterArticles(JsonNode articles) {
+    public List<JsonNode> filterArticles(JsonNode articles) {
         List<JsonNode> filteredArticles = new ArrayList<>();
         for (JsonNode article : articles) {
             String title = article.get("title").asText().toLowerCase();
@@ -96,15 +109,20 @@ public class NewsAPI extends DataRetriever {
      * @return The JSON response from the API as a String.
      * @throws IOException, InterruptedException if there is an issue with data retrieval.
      */
-    private String fetchDataFromAPI() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
+    public String fetchDataFromAPI() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(getENDPOINT()))
             .header("Accept", "application/json")
             .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // Check if the response is valid JSON
+        if (!response.body().startsWith("{") && !response.body().startsWith("[")) {
+            throw new IOException("Invalid JSON response");
+        }
+
         return response.body();
     }
-
 }
+

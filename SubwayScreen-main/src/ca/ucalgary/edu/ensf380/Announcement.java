@@ -59,7 +59,6 @@ public class Announcement {
             if (this.stationName == null) {
                 this.stationName = "Unknown";
             }
-            System.out.println("Updated station: " + stationName + " for train number: " + enteredTrain);
         } else {
             this.stationName = "Unknown";
         }
@@ -79,7 +78,6 @@ public class Announcement {
                     String code = columns[3];
                     String name = columns[4];
                     stationNamesAndType.put(code, name);
-                    System.out.println("Loaded station: " + name + " with code: " + code);
                 }
             }
         } catch (IOException e) {

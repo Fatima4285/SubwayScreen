@@ -42,7 +42,7 @@ public class Main extends JFrame {
     private static JPanel adPanel;
     private static AdvertisementDatabase advertisementDatabase;
 
-    public Main(String cityName, String enteredTrain) {
+    public Main(String cityName) {
         super("Subway Simulator Screen");
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -52,7 +52,7 @@ public class Main extends JFrame {
         outputTextArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(outputTextArea);
 
-        trainMapPanel = new TrainInfo(enteredTrain);
+        trainMapPanel = new TrainInfo();
 
         advertisementDatabase = new AdvertisementDatabase();
 
@@ -186,6 +186,7 @@ public class Main extends JFrame {
                 SwingUtilities.invokeLater(() -> displayTime());
             }
         }, 0, 1000);
+        
 
         newsProvider.display();
         newsPanel = newsProvider.getNewsPanel();
@@ -257,15 +258,14 @@ public class Main extends JFrame {
     }
 
     public static void main(String[] args) {
-        if (args.length < 2) {
-            System.out.println("Please enter command line arguments for city name and train number.");
+        if (args.length < 1) {
+            System.out.println("Please enter command line arguments for city name.");
             return;
         }
 
         cityName = args[0];
-        enteredTrain = args[1];
 
-        SwingUtilities.invokeLater(() -> new Main(cityName, enteredTrain));
+
+        SwingUtilities.invokeLater(() -> new Main(cityName));
     }
 }
-

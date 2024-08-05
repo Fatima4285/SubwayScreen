@@ -55,6 +55,7 @@ public class NewsAPI extends DataRetriever {
      * 
      * @return JsonNode containing the news data
      * @throws IOException if there is an issue with data retrieval or parsing
+     * @throws InterruptedException if interruption occurs
      */
     public JsonNode getNewsData() throws IOException, InterruptedException {
         String jsonResponse = fetchDataFromAPI();
@@ -65,7 +66,7 @@ public class NewsAPI extends DataRetriever {
      * Filters news articles based on the keyword.
      * 
      * @param articles JsonNode containing the articles to be filtered
-     * @return List<JsonNode> of filtered articles
+     * @return List of filtered articles as JsonNode
      */
     public List<JsonNode> filterArticles(JsonNode articles) {
         List<JsonNode> filteredArticles = new ArrayList<>();
@@ -107,7 +108,8 @@ public class NewsAPI extends DataRetriever {
      * Fetches data from the API.
      * 
      * @return The JSON response from the API as a String.
-     * @throws IOException, InterruptedException if there is an issue with data retrieval.
+     * @throws IOException if there is an issue with data retrieval.
+     * @throws InterruptedException if interruption occurs.
      */
     public String fetchDataFromAPI() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
@@ -125,4 +127,3 @@ public class NewsAPI extends DataRetriever {
         return response.body();
     }
 }
-

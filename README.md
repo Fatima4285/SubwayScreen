@@ -33,3 +33,4 @@ Navigate to the libs folder in Project and add all the necessary JAR files. Then
    <img width="973" alt="Screenshot 2024-08-04 at 10 22 32 PM" src="https://github.com/user-attachments/assets/4d356637-e606-4796-911b-aacd4ab1f6da">
 
 The program should run, please give it a few seconds to load. 
+Also note that the test files are located in the src/ca/ucalgary/edu/ensf380 folder and can be run from there

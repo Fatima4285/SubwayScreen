@@ -52,6 +52,7 @@ public class AnnouncementTest {
 
     /**
      * Tests the updateStationInfo method when the station code is found.
+     * @throws Exception when exception is found
      */
     @Test
     public void testUpdateStationInfoFound() throws Exception {
@@ -76,6 +77,7 @@ public class AnnouncementTest {
 
     /**
      * Tests the updateStationInfo method when the station code is not found.
+     * @throws Exception when exception is found
      */
     @Test
     public void testUpdateStationInfoNotFound() throws Exception {
@@ -100,6 +102,7 @@ public class AnnouncementTest {
 
     /**
      * Tests the createAnnouncement method for a known station.
+     * @throws Exception when exception is found
      */
     @Test
     public void testCreateAnnouncementKnownStation() throws Exception {
@@ -112,6 +115,7 @@ public class AnnouncementTest {
 
     /**
      * Tests the createAnnouncement method for an unknown station.
+     * @throws Exception when exception is found
      */
     @Test
     public void testCreateAnnouncementUnknownStation() throws Exception {
@@ -124,6 +128,8 @@ public class AnnouncementTest {
 
     /**
      * Tests the periodicUpdate method to ensure it updates the announcement.
+     * @throws Exception when exception is found
+     * @throws InterruptedException when interruption occurs 
      */
     @Test
     public void testPeriodicUpdate() throws InterruptedException, Exception {

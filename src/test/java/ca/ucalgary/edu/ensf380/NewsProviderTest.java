@@ -53,6 +53,7 @@ public class NewsProviderTest {
 
     /**
      * Tests the display method with a mock NewsAPI response.
+     * @throws Exception when exception occurs
      */
     @Test
     public void testDisplay() throws Exception {
@@ -93,6 +94,7 @@ public class NewsProviderTest {
 
     /**
      * Tests the display method with no articles found.
+     * @throws Exception when exception occurs
      */
     @Test
     public void testDisplayNoArticlesFound() throws Exception {

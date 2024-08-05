@@ -59,8 +59,6 @@ public class TrainInfoTest {
     /**
      * Tests the getLastModified method of TrainInfo using reflection.
      * Verifies that the newest file in the specified folder is returned.
-     * 
-     * @throws Exception if an error occurs while invoking the method or creating files
      */
     @Test
     public void testGetLastModified() {

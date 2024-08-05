@@ -17,7 +17,9 @@ public class AdvertisementDatabaseTest {
         adDatabaseMock = mock(AdvertisementDatabase.class);
     }
 
-    /**This method tests that the connection is initialized*/
+    /**This method tests that the connection is initialized
+     * @throws SQLException if there is an error
+     */
     @Test
     public void initializeConnectionTest() throws SQLException {
         Connection mockConnection = mock(Connection.class);
@@ -30,7 +32,8 @@ public class AdvertisementDatabaseTest {
     }
 
     /**This method makes sure that the method selectAd returns the ad, path, and mediatype that is expected
-     * @throws SQLException */
+     * @throws SQLException if there is an error
+     * */
     @Test
     public void selectAdTest() throws SQLException {
         String expectedAd = "Ad Title, Ad Path, Ad MediaType\n";
@@ -43,7 +46,8 @@ public class AdvertisementDatabaseTest {
     }
 
     /**This method makes sure that the method selectPath returns the filepath that is expected from the database Query
-     * @throws SQLException */
+     * @throws SQLException if there is an error
+     */
     @Test
     public void selectPathTest() throws SQLException {
         String expectedPath = "C:random\\path\n";
@@ -55,7 +59,9 @@ public class AdvertisementDatabaseTest {
         assertEquals("The expected and actual paths do not match", expectedPath, actualPath);
     }
 
-    /**This method makes sure that the method selectMediaTypeAndId returns the mediaType and id that is expected*/
+    /**This method makes sure that the method selectMediaTypeAndId returns the mediaType and id that is expected
+     * @throws SQLException if there is an error
+     */
     @Test
     public void selectMediaTypeAndIdTest() throws SQLException {
         String expectedType = "1, JPEG\n";

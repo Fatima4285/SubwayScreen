@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException; 
+/**Class consisiting of unit tests for weatherService object*/
 
 public class WeatherServiceTest {
 
@@ -66,7 +67,9 @@ public class WeatherServiceTest {
     }
     
     /**This method checks that when we call the updateWeatherData method it correctly updates the weather from
-     * the WeatherParser class, so we check that the temperature, wind, and rain is correctly updated*/
+     * the WeatherParser class, so we check that the temperature, wind, and rain is correctly updated
+     * @throws IOException when there is an issue with input/output
+     **/
     @Test
     public void updateWeatherDataTest() throws IOException {
         String expTemp = "+10 °C";

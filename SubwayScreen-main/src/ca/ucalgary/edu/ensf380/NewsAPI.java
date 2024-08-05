@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The NewsAPI class extends DataRetriever and is responsible for
- * interacting with news data APIs. This class is designed to retrieve news data
+ * The NewsAPI class extends DataRetriever and
+ * interacts with news APIs. This class is designed to retrieve news data
  * from a specified endpoint.
  * 
  */
@@ -81,7 +81,7 @@ public class NewsAPI extends DataRetriever {
     }
 
     /**
-     * Example method to print out news headlines.
+     * method to print out news headlines.
      */
     public void printNewsHeadlines() {
         try {
@@ -119,7 +119,6 @@ public class NewsAPI extends DataRetriever {
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // Check if the response is valid JSON
         if (!response.body().startsWith("{") && !response.body().startsWith("[")) {
             throw new IOException("Invalid JSON response");
         }

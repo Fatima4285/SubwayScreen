@@ -3,9 +3,9 @@ package ca.ucalgary.edu.ensf380;
 import java.sql.*;
 
 /**
- * The AdvertisementDatabase class is responsible for establishing a connection
- * to a database using the provided URL, username, and password. This class 
- * is used to interact with the database for advertisement-related operations.
+ * The AdvertisementDatabase class is responsible for making a connection
+ * to a database using the URL, username, and password. This class 
+ * is used to interact with the database.
  * 
  * @version 1.0
  * @since 2024-07-20
@@ -23,7 +23,6 @@ public class AdvertisementDatabase {
      * Default constructor.
      */
     public AdvertisementDatabase() {
-        // No initialization required here.
     }
 
     /**
@@ -48,7 +47,7 @@ public class AdvertisementDatabase {
      * @throws SQLException If the fields of the database cannot be accessed.
      */
     public String selectAd() throws SQLException {
-        StringBuilder adInfo = new StringBuilder(); // Use StringBuilder for efficiency
+        StringBuilder adInfo = new StringBuilder(); 
 
         try {
             Statement myStmt = dbConnect.createStatement();
@@ -108,7 +107,7 @@ public class AdvertisementDatabase {
      * @throws SQLException If the fields of the database cannot be accessed.
      */
     public String selectMediaTypeAndId() throws SQLException {
-        StringBuilder adMT = new StringBuilder(); // Use StringBuilder for efficiency
+        StringBuilder adMT = new StringBuilder(); 
 
         try {
             Statement myStmt = dbConnect.createStatement();
@@ -149,19 +148,5 @@ public class AdvertisementDatabase {
         }
     }
 
-    // Uncomment the main method to see results of queries
-    /*
-    public static void main(String[] args) {
-        AdvertisementDatabase db = new AdvertisementDatabase();
-        try {
-            db.initializeConnection();
-            System.out.println(db.selectAd());
-            System.out.println(db.selectPath());
-            System.out.println(db.selectMediaTypeAndId());
-            db.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    */
+  
 }

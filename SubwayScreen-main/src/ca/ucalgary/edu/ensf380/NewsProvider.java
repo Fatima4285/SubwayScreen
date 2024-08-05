@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * Provides news content by fetching data from a specified endpoint and displaying it in a Swing JPanel.
- * This class is designed to handle news articles, including their titles, descriptions, and images.
+ * This class handles news articles.
  */
 public class NewsProvider extends NewsAPI implements Displayable {
 
@@ -32,8 +32,8 @@ public class NewsProvider extends NewsAPI implements Displayable {
     }
     
     /**
-     * Overloaded constructor for testing purposes. Initializes the news provider with the given endpoint
-     * and sets default values for the headline and content. Configures the JPanel to display news content.
+     * Overloaded constructor that initializes the news provider with the given endpoint
+     * and sets default values for the headline and content. 
      *
      * @param ENDPOINT The endpoint URL to fetch news data from.
      */
@@ -83,9 +83,9 @@ public class NewsProvider extends NewsAPI implements Displayable {
     }
 
     /**
-     * Displays the news content in the JPanel. This method fetches news data from the specified endpoint,
-     * parses the data to extract the first article's title, description, and image, and updates the panel to show this information.
-     * If any errors occur during data retrieval or processing, appropriate error messages are shown to the user.
+     * Displays the news content in the JPanel. This method gets news data from the specified endpoint,
+     * parses the data to get the first article's title, description, and image, and updates the panel to show this information.
+     * If any errors occur during data retrieval or processing, error messages are shown to the user.
      */
     @Override
     public void display() {

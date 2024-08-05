@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * The Main class is the main entry point for the Subway Simulator Screen application.
+ * The Main class is the main entry point for the application.
  * It extends JFrame and sets up the GUI, handles the display of advertisements,
  * updates weather information, train maps, and handles announcements.
  * 
@@ -28,110 +28,32 @@ import java.sql.Statement;
  * @since 2024-07-20
  */
 public class Main extends JFrame {
-	/**
-     * The JTextArea for displaying output text.
-     */
+
     private JTextArea outputTextArea;
-
-    /**
-     * The Process object for handling external processes.
-     */
     private Process process;
-
-    /**
-     * The SimpleDateFormat object for formatting dates.
-     */
     private SimpleDateFormat dateFormat;
-
-    /**
-     * The TrainInfo panel for displaying train map information.
-     */
     private TrainInfo trainMapPanel;
-
-    /**
-     * The ExecutorService for managing asynchronous tasks.
-     */
     private ExecutorService executorService;
-
-    /**
-     * The JLabel for displaying temperature information.
-     */
     private static JLabel tempLabel;
-
-    /**
-     * The JLabel for displaying wind information.
-     */
     private static JLabel windLabel;
-
-    /**
-     * The JLabel for displaying rain information.
-     */
     private static JLabel rainLabel;
-
-    /**
-     * The JLabel for displaying time information.
-     */
     private static JLabel timeLabel;
-
-    /**
-     * The JPanel for displaying news content.
-     */
     private static JPanel newsPanel;
-
-    /**
-     * The JLabel for displaying map information.
-     */
     private static JLabel mapLabel;
-
-    /**
-     * The list of Advertisement objects.
-     */
     private static List<Advertisement> ads = new ArrayList<>();
-
-    /**
-     * The index of the current advertisement being displayed.
-     */
     private static int currentAdIndex = 0;
-
-    /**
-     * The name of the city for which the information is displayed.
-     */
     private static String cityName;
-
-    /**
-     * The JPanel for displaying advertisements.
-     */
     private static JPanel adPanel;
-
-    /**
-     * The AdvertisementDatabase for managing advertisements.
-     */
     private static AdvertisementDatabase advertisementDatabase;
-
-    /**
-     * The name of the entered train.
-     */
     private static String enteredTrain;
-
-    /**
-     * The Announcement object for managing announcements.
-     */
     private Announcement announcement;
-
-    /**
-     * The CardLayout for managing multiple panels.
-     */
     private CardLayout cardLayout;
-
-    /**
-     * The main JPanel for displaying content.
-     */
     private JPanel mainPanel;
 
     /**
      * Constructs the Main JFrame for the Subway Simulator Screen application.
      *
-     * @param cityName     The name of the city for weather information.
+     * @param cityName     The name of the city for weather info.
      * @param enteredTrain The train number entered by the user.
      */
     public Main(String cityName, String enteredTrain) {
@@ -148,8 +70,8 @@ public class Main extends JFrame {
 
         advertisementDatabase = new AdvertisementDatabase();
         
-        this.enteredTrain = enteredTrain; // Save the enteredTrain value
-        announcement = new Announcement(Integer.parseInt(enteredTrain), trainMapPanel); // Initialize Announcement
+        this.enteredTrain = enteredTrain; 
+        announcement = new Announcement(Integer.parseInt(enteredTrain), trainMapPanel); 
 
         adPanel = new JPanel();
         adPanel.setLayout(new CardLayout());
@@ -244,21 +166,21 @@ public class Main extends JFrame {
             @Override
             public void run() {
                 SwingUtilities.invokeLater(() -> {
-                    // Show the ad panel
+             
                     cardLayout.show(mainPanel, "AdPanel");
 
-                    // Schedule the transition to the train map panel after 10 seconds
+          
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
                             SwingUtilities.invokeLater(() -> {
-                                // Show the train map panel
+                               
                                 cardLayout.show(mainPanel, "TrainMapPanel");
                             });
                         }
-                    }, 10000); // Show ad panel for 10 seconds
+                    }, 10000); 
 
-                    // Update the ad after 10 seconds
+                   
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
@@ -273,11 +195,11 @@ public class Main extends JFrame {
                                 }
                             }
                         }
-                    }, 10000); // Update ad after 10 seconds
+                    }, 10000); 
                 });
             }
         };
-        adTimer.schedule(adTask, 0, 15000); // Run the task every 15 seconds
+        adTimer.schedule(adTask, 0, 15000); 
 
         WeatherService weatherService = new WeatherService(weatherParser);
         String endpoint = "https://newsapi.org/v2/top-headlines?country=us&apiKey=2fba803407f040ccb4a075a558ea4a24";

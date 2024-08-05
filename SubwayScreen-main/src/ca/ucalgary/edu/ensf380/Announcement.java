@@ -43,7 +43,7 @@ public class Announcement {
         updateStationInfo();
         createAndSpeakAnnouncement();
 
-        // Start a thread to periodically check for new files
+       
         new Thread(this::periodicUpdate).start();
     }
 
@@ -53,8 +53,8 @@ public class Announcement {
     public void periodicUpdate() {
         while (true) {
             try {
-                Thread.sleep(10000); // Check every 10 seconds
-                populateTrainToStationMap(); // Reload data from the latest file
+                Thread.sleep(10000); 
+                populateTrainToStationMap(); 
                 updateStationInfo();
                 createAndSpeakAnnouncement();
             } catch (InterruptedException e) {

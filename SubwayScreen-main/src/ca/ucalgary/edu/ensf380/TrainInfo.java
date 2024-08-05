@@ -20,47 +20,15 @@ import java.util.TimerTask;
  * @since 2024-07-20
  * */
 public class TrainInfo extends JPanel {
-
-	/**
-	 * A map that stores the locations of stations, where the key is the station ID
-	 * and the value is a Point representing the coordinates of the station.
-	 */
 	private Map<String, Point> stationLocations;
-
-	/**
-	 * A map that associates station IDs with their corresponding names.
-	 * The key is the station ID, and the value is the name of the station.
-	 */
 	private Map<String, String> stationNames;
-
-	/**
-	 * A map that holds the train routes. The key is the train ID, and the value is an array of station IDs
-	 * representing the route for that train.
-	 */
 	private Map<String, String[]> trainRoutes;
-
-	/**
-	 * The ID of the currently active train.
-	 */
 	private String currentTrainId;
-
-	/**
-	 * The route of the currently active train, represented as an array of station IDs.
-	 */
 	private String[] currentRoute;
-
-	/**
-	 * The path to the output folder for the train files.
-	 * This is a static final constant used to determine where output files will be stored.
-	 */
 	private static final String OUT_FOLDER_PATH = "subwayscreen-main/out";
-
-	/**
-	 * A Timer used for scheduling tasks in TrainInfo.
-	 */
 	private Timer timer;
 
-    /**Class constructor initializes the variables such as stationLocations, stationNames, and trainRoutes,
+    /**Class constructor initializes the variables stationLocations, stationNames, and trainRoutes,
      *  and checks for new files every 0.5 seconds*/
     public TrainInfo() {
         stationLocations = new HashMap<>();
@@ -76,23 +44,23 @@ public class TrainInfo extends JPanel {
             e.printStackTrace();
         }
 
-        clearOutFolder(); // Clear the out folder
+        clearOutFolder();
 
-        // Load initial train routes
+        
         try {
             loadInitialTrainRoutes();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Timer to check for new files periodically
+        
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 checkForNewFiles();
             }
-        }, 0, 500); // Start immediately and check every 15 seconds
+        }, 0, 500); 
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -147,7 +115,7 @@ public class TrainInfo extends JPanel {
             }
         }
 
-        repaint(); // Ensure stations are displayed immediately
+        repaint(); 
     }
 
     /**loads the initial train Routes from the most recent file

@@ -235,7 +235,7 @@ public class Main extends JFrame {
      * @param line The line to format.
      * @return The formatted line with a timestamp.
      */
-    private String formatOutput(String line) {
+    public String formatOutput(String line) {
         String timestamp = dateFormat.format(new Date());
         return String.format("[%s] %s", timestamp, line);
     }
@@ -245,7 +245,7 @@ public class Main extends JFrame {
      *
      * @param line The line containing train position data.
      */
-    private void updateMapData(String line) {
+    public void updateMapData(String line) {
         if (line.startsWith("Train positions:")) {
             line = line.replace("Train positions:", "").trim();
             String[] routes = line.split("\n");
@@ -266,7 +266,7 @@ public class Main extends JFrame {
     /**
      * Loads advertisements from the database.
      */
-    private void loadAdsFromDatabase() {
+    public void loadAdsFromDatabase() {
         try (Connection conn = advertisementDatabase.initializeConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM Advertisements")) {

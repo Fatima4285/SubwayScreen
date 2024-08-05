@@ -201,7 +201,7 @@ public class TrainInfo extends JPanel {
     /**Paints the Station and Train components
      * @param g Graphics object for painting*/
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawStations(g);
         drawTrains(g);
@@ -209,7 +209,7 @@ public class TrainInfo extends JPanel {
 
     /**draw the stations using coordinates as black dots
      * @param g graphics object for painting*/
-    private void drawStations(Graphics g) {
+    public void drawStations(Graphics g) {
         int dotSize = 6;
         g.setColor(Color.BLACK);
 
@@ -228,7 +228,7 @@ public class TrainInfo extends JPanel {
     /**draw trains (currently moving trains) as red dots and shows the station names next to the marker
      * @param g graphics object for painting
      * */
-    private void drawTrains(Graphics g) {
+    public void drawTrains(Graphics g) {
         for (Map.Entry<String, String[]> entry : trainRoutes.entrySet()) {
             String trainId = entry.getKey();
             String[] route = entry.getValue();

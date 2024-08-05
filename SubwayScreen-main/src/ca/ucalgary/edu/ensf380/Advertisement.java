@@ -8,7 +8,7 @@ package ca.ucalgary.edu.ensf380;
  * @since 2024-07-20
  */
 public class Advertisement {
-	protected String filePath;
+	private String filePath;
 	private static final int DISPLAYDURATION = 10;
 	
 	 /**

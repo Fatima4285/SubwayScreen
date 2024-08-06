@@ -34,3 +34,5 @@ Navigate to the libs folder in Project and add all the necessary JAR files. Then
 
 The program should run, please give it a few seconds to load. 
 Also note that the test files are located in the src/test/java/ca/ucalgary/edu/ensf380 folder and can be run from there
+
+ALSO, to view WeatherParser.java, please go into WeatherProject > src > ca.ucalgary.ensf380 

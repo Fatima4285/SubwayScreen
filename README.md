@@ -1,6 +1,6 @@
 # SubwayScreen
 
-# Please read the following informatiom before compiling
+# Please read the following information before compiling
 
 How To Setup The Database:
 1. Download the advertisement.sql file provided in the src directory of the application
